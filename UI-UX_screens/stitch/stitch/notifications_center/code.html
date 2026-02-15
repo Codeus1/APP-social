@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Notifications Center</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+            extend: {
+                colors: {
+                    "primary": "#f4258c",
+                    "background-light": "#f8f5f7",
+                    "background-dark": "#221019",
+                },
+                fontFamily: {
+                    "display": ["Plus Jakarta Sans", "sans-serif"]
+                },
+                borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                boxShadow: {
+                    "glow": "0 0 20px -5px rgba(244, 37, 140, 0.5)",
+                    "glow-sm": "0 0 10px -2px rgba(244, 37, 140, 0.3)",
+                }
+            },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar hiding for clean UI */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-gray-900 dark:text-white min-h-screen flex justify-center items-start pt-4 sm:pt-10">
+<!-- Mobile Container -->
+<div class="w-full max-w-md bg-white dark:bg-background-dark sm:rounded-[3rem] sm:border-8 sm:border-gray-900 overflow-hidden shadow-2xl relative min-h-[850px]">
+<!-- Status Bar Placeholder (Visual only) -->
+<div class="h-12 w-full flex justify-between items-center px-6 pt-2">
+<span class="text-sm font-bold">9:41</span>
+<div class="flex space-x-2 items-center">
+<span class="material-icons text-sm">signal_cellular_alt</span>
+<span class="material-icons text-sm">wifi</span>
+<span class="material-icons text-sm">battery_full</span>
+</div>
+</div>
+<!-- Header -->
+<div class="px-6 pb-4 pt-2 flex justify-between items-end">
+<h1 class="text-3xl font-bold tracking-tight">Notifications</h1>
+<button class="text-sm font-medium text-primary hover:text-primary/80 transition-colors pb-1">
+                Mark all read
+            </button>
+</div>
+<!-- Tabs -->
+<div class="px-6 mb-6">
+<div class="bg-gray-100 dark:bg-white/5 p-1 rounded-full flex relative">
+<button class="flex-1 py-2.5 text-sm font-semibold rounded-full bg-white dark:bg-primary shadow-sm text-gray-900 dark:text-white transition-all">
+                    All
+                </button>
+<button class="flex-1 py-2.5 text-sm font-medium rounded-full text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-all relative">
+                    Requests
+                    <span class="absolute top-2 right-8 w-2 h-2 bg-primary rounded-full animate-pulse dark:bg-white"></span>
+</button>
+</div>
+</div>
+<!-- Content List -->
+<div class="px-4 pb-24 space-y-4 overflow-y-auto h-[680px] no-scrollbar">
+<!-- Section Header: Today -->
+<div class="px-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">Today</div>
+<!-- Item 1: Accepted Request (Unread) -->
+<div class="group relative bg-white dark:bg-white/5 hover:dark:bg-white/10 p-4 rounded-2xl transition-all cursor-pointer border border-transparent hover:border-primary/20">
+<div class="absolute right-4 top-4 w-2.5 h-2.5 bg-primary rounded-full shadow-glow-sm"></div>
+<div class="flex gap-4">
+<div class="relative flex-shrink-0">
+<img alt="Elena smiling portrait" class="w-12 h-12 rounded-full object-cover border-2 border-background-light dark:border-background-dark" data-alt="Young woman smiling portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhYrk5_Uqa4GVw-L8vunZvCcQWn7J8UkE7XmOybejAtABKRfkyDzJI1aStk_Z6_ygwLmYibJKKwsUoMjsmZ3-4PiGauZAHkke5zegNFIhHUCF7M0K-yG9X3_HziqBkejUHXhkLlhwOvkuFiqT-Objd7Jz4KugkAulBTiJuMgaxAB7sNU1-DO1b5G319JBhP3fPkdaD4kxz74CKTrJeRlobOxvnXD_36io4Ia2eHwVKUxzy3AkiixHYhV7t3578UzcKYzttmpTjj50"/>
+<div class="absolute -bottom-1 -right-1 bg-green-500 border-2 border-background-light dark:border-background-dark rounded-full p-0.5 flex items-center justify-center w-5 h-5">
+<span class="material-icons text-[10px] text-white">check</span>
+</div>
+</div>
+<div class="flex-1 pr-4">
+<p class="text-sm leading-snug">
+<span class="font-bold text-gray-900 dark:text-white">Elena</span> accepted your request to join <span class="text-primary font-medium">Cocktails in Malasaña</span>
+</p>
+<p class="text-xs text-gray-500 mt-1">2m ago</p>
+</div>
+</div>
+</div>
+<!-- Item 2: Group Message (Unread) -->
+<div class="group relative bg-white dark:bg-white/5 hover:dark:bg-white/10 p-4 rounded-2xl transition-all cursor-pointer border border-transparent hover:border-primary/20">
+<div class="absolute right-4 top-4 w-2.5 h-2.5 bg-primary rounded-full shadow-glow-sm"></div>
+<div class="flex gap-4">
+<div class="relative flex-shrink-0">
+<div class="w-12 h-12 rounded-full bg-gradient-to-tr from-purple-600 to-blue-600 flex items-center justify-center border-2 border-background-light dark:border-background-dark">
+<span class="material-icons text-white text-lg">queue_music</span>
+</div>
+<div class="absolute -bottom-1 -right-1 bg-blue-500 border-2 border-background-light dark:border-background-dark rounded-full p-0.5 flex items-center justify-center w-5 h-5">
+<span class="material-icons text-[10px] text-white">chat_bubble</span>
+</div>
+</div>
+<div class="flex-1 pr-4">
+<p class="text-sm leading-snug">
+                            New message in <span class="font-bold text-gray-900 dark:text-white">Berlin Techno Group</span>: "Is anyone heading to Berghain..."
+                        </p>
+<p class="text-xs text-gray-500 mt-1">15m ago</p>
+</div>
+</div>
+</div>
+<!-- Item 3: Request (Actionable) -->
+<div class="relative bg-primary/10 border border-primary/20 p-4 rounded-2xl">
+<div class="flex gap-4 mb-3">
+<div class="relative flex-shrink-0">
+<img alt="Sofia portrait looking sideways" class="w-12 h-12 rounded-full object-cover border-2 border-background-light dark:border-background-dark" data-alt="Young woman with curly hair" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAkgGxalg5PIGA5rH3ARkY3TGcAGJucAQ2WWYT8of2p_X3LP8ezvEDDcvSx9-Hahjg14rwD1njtipuCxufSxTX1wgcV2l6tuTzweut2TrChvib9URuXAzCvPJaxkaIKLorwo81aKg-Ciw6Fm6v4U8SA-KWLhaj_kC5kWp6A_yG5elhvpganE82nQ8AiuxJWBkgCLdn_-WwtU3RU637dPWyw0HBZTwc1NQUFCYCOB4Ji5GGRgIudzWZCwYrWAjV3mkITauO-Ipbusk"/>
+<div class="absolute -bottom-1 -right-1 bg-primary border-2 border-background-light dark:border-background-dark rounded-full p-0.5 flex items-center justify-center w-5 h-5">
+<span class="material-icons text-[10px] text-white">person_add</span>
+</div>
+</div>
+<div class="flex-1">
+<p class="text-sm leading-snug text-gray-900 dark:text-white">
+<span class="font-bold">Sofia</span> wants to join your plan <span class="font-medium text-primary">Jazz Club Visit</span>
+</p>
+<p class="text-xs text-gray-500 mt-1">32m ago</p>
+</div>
+</div>
+<div class="flex gap-3 pl-16">
+<button class="flex-1 bg-primary hover:bg-primary/90 text-white text-xs font-bold py-2.5 px-4 rounded-full shadow-glow-sm transition-transform active:scale-95">
+                        Accept
+                    </button>
+<button class="flex-1 bg-white dark:bg-white/10 hover:bg-gray-100 dark:hover:bg-white/20 text-gray-900 dark:text-white text-xs font-bold py-2.5 px-4 rounded-full transition-transform active:scale-95 border border-gray-200 dark:border-transparent">
+                        Decline
+                    </button>
+</div>
+</div>
+<!-- Section Header: Yesterday -->
+<div class="px-2 text-xs font-semibold text-gray-500 uppercase tracking-wider pt-4">Yesterday</div>
+<!-- Item 4: Profile View (Read) -->
+<div class="group relative bg-white dark:bg-white/5 hover:dark:bg-white/10 p-4 rounded-2xl transition-all cursor-pointer border border-transparent hover:border-primary/20 opacity-80 hover:opacity-100">
+<div class="flex gap-4">
+<div class="relative flex-shrink-0">
+<div class="w-12 h-12 rounded-full bg-gray-200 dark:bg-white/10 flex items-center justify-center border-2 border-background-light dark:border-background-dark">
+<span class="material-icons text-gray-400 text-2xl">visibility</span>
+</div>
+</div>
+<div class="flex-1 pr-4 flex items-center">
+<div>
+<p class="text-sm leading-snug text-gray-900 dark:text-white">
+                                Someone viewed your profile
+                            </p>
+<p class="text-xs text-gray-500 mt-1">14h ago</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Item 5: Invite (Read) -->
+<div class="group relative bg-white dark:bg-white/5 hover:dark:bg-white/10 p-4 rounded-2xl transition-all cursor-pointer border border-transparent hover:border-primary/20 opacity-80 hover:opacity-100">
+<div class="flex gap-4">
+<div class="relative flex-shrink-0">
+<img alt="Marcus portrait" class="w-12 h-12 rounded-full object-cover border-2 border-background-light dark:border-background-dark" data-alt="Young man with beard portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC9_E_k5Oy_Lc23v-D9WLhnHOMHEATqOSXKbqnrNo2sncGEsXiNu1yQZYRDEN4pT3fyaxO-fr97amCsbeSKb3OWEUKwiOJ1Es1Vxu_sac1DVosINefqs-wGzs6-vtsyq-ITzakyQOrNuNOKMhFzPiPz9BMqJVm7GpEwmstG84IQbUojXDbPbma3Fc25lOO67H85JzLtul4_Iz19Jsjnqj-eHFrkAR2hqxv1GhUb3UkAUZZ3tciBmx1nuiWcmyY3WqtF_4cDCuJlOgs"/>
+<div class="absolute -bottom-1 -right-1 bg-orange-500 border-2 border-background-light dark:border-background-dark rounded-full p-0.5 flex items-center justify-center w-5 h-5">
+<span class="material-icons text-[10px] text-white">local_pizza</span>
+</div>
+</div>
+<div class="flex-1 pr-4">
+<p class="text-sm leading-snug">
+<span class="font-bold text-gray-900 dark:text-white">Marcus</span> invited you to <span class="text-primary font-medium">Late Night Pizza</span>
+</p>
+<p class="text-xs text-gray-500 mt-1">16h ago</p>
+</div>
+</div>
+</div>
+<!-- Item 6: Earlier interaction (Read) -->
+<div class="group relative bg-white dark:bg-white/5 hover:dark:bg-white/10 p-4 rounded-2xl transition-all cursor-pointer border border-transparent hover:border-primary/20 opacity-60 hover:opacity-100">
+<div class="flex gap-4">
+<div class="relative flex-shrink-0">
+<img alt="Anna portrait" class="w-12 h-12 rounded-full object-cover border-2 border-background-light dark:border-background-dark" data-alt="Woman with short hair portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBC_CLSfI4PhAzO0x3qzaQyHtqYhBgHrrjCItros7Lv6qTg9YTNMst3OfEcCdwBJExnaAPM9J7Oqzg6TQkysIkWkrZO6Dy0cyUYows6XiO3fgtiLX1hO2GB8-1BmWy3GXf_dzM8-p0ZQouJd1L0F74qO9G0ZnhM72jZztQjFVtvg50FwI3JCMcm9nK4mOiuqi92H8FUuJx4PD8rHW4aGgKCU15xvwaSLWVDaSbotaqbQLr2jKHio_TRfT6nHZ-T1dxXAxk0ZYW4LhM"/>
+</div>
+<div class="flex-1 pr-4">
+<p class="text-sm leading-snug">
+<span class="font-bold text-gray-900 dark:text-white">Anna</span> liked your photo in <span class="text-primary font-medium">Rooftop vibes</span>
+</p>
+<p class="text-xs text-gray-500 mt-1">20h ago</p>
+</div>
+</div>
+</div>
+<!-- End of list spacer -->
+<div class="h-8"></div>
+</div>
+<!-- Bottom Navigation (Context) -->
+<div class="absolute bottom-0 w-full bg-white dark:bg-background-dark/95 backdrop-blur-md border-t border-gray-100 dark:border-white/5 pb-6 pt-3 px-6 flex justify-between items-center z-20">
+<button class="flex flex-col items-center gap-1 text-gray-400 hover:text-primary transition-colors">
+<span class="material-icons text-2xl">explore</span>
+<span class="text-[10px] font-medium">Discover</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-gray-400 hover:text-primary transition-colors">
+<span class="material-icons text-2xl">local_activity</span>
+<span class="text-[10px] font-medium">Plans</span>
+</button>
+<div class="relative -top-5">
+<button class="w-14 h-14 bg-primary rounded-full flex items-center justify-center text-white shadow-glow hover:scale-105 transition-transform">
+<span class="material-icons text-2xl">add</span>
+</button>
+</div>
+<button class="flex flex-col items-center gap-1 text-primary">
+<span class="material-icons text-2xl">notifications</span>
+<span class="text-[10px] font-medium">Alerts</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-gray-400 hover:text-primary transition-colors">
+<span class="material-icons text-2xl">person</span>
+<span class="text-[10px] font-medium">Profile</span>
+</button>
+</div>
+<!-- Floating Gradient Effect for immersive feel -->
+<div class="absolute top-0 right-0 w-64 h-64 bg-primary opacity-[0.07] blur-[80px] rounded-full pointer-events-none"></div>
+<div class="absolute bottom-20 left-0 w-48 h-48 bg-blue-600 opacity-[0.05] blur-[60px] rounded-full pointer-events-none"></div>
+</div>
+</body></html>

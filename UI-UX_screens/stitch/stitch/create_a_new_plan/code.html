@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Create a New Plan</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#f4258c",
+              "background-light": "#f8f5f7",
+              "background-dark": "#221019",
+              "surface-dark": "#361a27", // A slightly lighter variation for cards/inputs
+              "surface-darker": "#1a0b13", // A darker variation for depth
+            },
+            fontFamily: {
+              "display": ["Plus Jakarta Sans", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+            boxShadow: {
+                "neon": "0 0 15px rgba(244, 37, 140, 0.4)",
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        /* Custom styles for range slider thumb */
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 24px;
+            width: 24px;
+            border-radius: 50%;
+            background: #f4258c;
+            cursor: pointer;
+            margin-top: -10px;
+            box-shadow: 0 0 10px rgba(244, 37, 140, 0.5);
+        }
+        input[type=range]::-moz-range-thumb {
+            height: 24px;
+            width: 24px;
+            border-radius: 50%;
+            background: #f4258c;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(244, 37, 140, 0.5);
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #361a27;
+            border-radius: 2px;
+        }
+        
+        /* Hide scrollbar for horizontal scroll areas */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-800 dark:text-white min-h-screen flex justify-center items-start pt-4 pb-24">
+<!-- Mobile Container -->
+<div class="w-full max-w-md px-5 relative">
+<!-- Header with Back Button -->
+<header class="flex items-center justify-between mb-8">
+<button class="p-2 rounded-full bg-surface-dark/50 hover:bg-surface-dark text-white/80 transition-colors">
+<span class="material-icons-round text-xl">arrow_back</span>
+</button>
+<div class="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center overflow-hidden border border-primary/30">
+<!-- User Avatar Placeholder -->
+<img class="w-full h-full object-cover" data-alt="Young woman profile picture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDxAQj73C9Zoaf5ZB6kKjnXpVrY5iJ9epYU1tXqN8iXERAmRkSXyZdiFX4M5gCZPkSz5NGBCnd_ooLLyyyj8AmlZqTeDJTEHdZ8gDMqRMkBisD6xRGPaBVAOp2ULlFYQJFpUqFaT1vwl6e-A23xmeA49Lk22nWd4ZKiFbdw7c-s2Z7eqq7Xm96UwCqsThOsBaD5Pq3Uu_-AADy-j-FMmB0ctWl6-ap60AUcwFRD8yQN0fPoAHngeH1vO5ihQFBERSBvzzSRspyg7LU"/>
+</div>
+</header>
+<!-- Page Title -->
+<div class="mb-8">
+<h1 class="text-3xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white to-white/70">Let's make a plan</h1>
+<p class="text-white/60 mt-1 text-sm">Create a vibe for tonight.</p>
+</div>
+<!-- Section 1: The Vibe (Activity Type) -->
+<section class="mb-8">
+<h2 class="text-lg font-semibold mb-4 flex items-center text-primary/90">
+<span class="material-icons-round mr-2 text-base">local_fire_department</span>
+                What's the move?
+            </h2>
+<div class="flex space-x-4 overflow-x-auto no-scrollbar pb-2">
+<!-- Active Item -->
+<button class="flex flex-col items-center space-y-2 min-w-[80px] group">
+<div class="w-16 h-16 rounded-2xl bg-primary flex items-center justify-center shadow-neon transition-transform transform group-active:scale-95">
+<span class="material-icons-round text-3xl text-white">local_bar</span>
+</div>
+<span class="text-xs font-medium text-white">Drinks</span>
+</button>
+<!-- Inactive Item -->
+<button class="flex flex-col items-center space-y-2 min-w-[80px] group">
+<div class="w-16 h-16 rounded-2xl bg-surface-dark border border-white/5 flex items-center justify-center text-white/50 group-hover:bg-surface-dark/80 group-hover:text-primary transition-colors">
+<span class="material-icons-round text-3xl">music_note</span>
+</div>
+<span class="text-xs font-medium text-white/50">Dance</span>
+</button>
+<!-- Inactive Item -->
+<button class="flex flex-col items-center space-y-2 min-w-[80px] group">
+<div class="w-16 h-16 rounded-2xl bg-surface-dark border border-white/5 flex items-center justify-center text-white/50 group-hover:bg-surface-dark/80 group-hover:text-primary transition-colors">
+<span class="material-icons-round text-3xl">restaurant</span>
+</div>
+<span class="text-xs font-medium text-white/50">Dinner</span>
+</button>
+<!-- Inactive Item -->
+<button class="flex flex-col items-center space-y-2 min-w-[80px] group">
+<div class="w-16 h-16 rounded-2xl bg-surface-dark border border-white/5 flex items-center justify-center text-white/50 group-hover:bg-surface-dark/80 group-hover:text-primary transition-colors">
+<span class="material-icons-round text-3xl">confirmation_number</span>
+</div>
+<span class="text-xs font-medium text-white/50">Event</span>
+</button>
+</div>
+</section>
+<!-- Section 2: The Basics (Inputs) -->
+<section class="mb-8 space-y-5">
+<h2 class="text-lg font-semibold mb-2 text-white/90">The Basics</h2>
+<!-- Title Input -->
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+<span class="material-icons-round text-primary/60 group-focus-within:text-primary transition-colors">edit</span>
+</div>
+<input class="block w-full pl-12 pr-4 py-4 bg-surface-dark border-0 rounded-xl text-white placeholder-white/30 focus:ring-2 focus:ring-primary focus:bg-surface-darker transition-all" placeholder="Plan Title (e.g. Tapas &amp; Sangria)" type="text"/>
+</div>
+<!-- Location Input -->
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+<span class="material-icons-round text-primary/60 group-focus-within:text-primary transition-colors">place</span>
+</div>
+<input class="block w-full pl-12 pr-4 py-4 bg-surface-dark border-0 rounded-xl text-white placeholder-white/30 focus:ring-2 focus:ring-primary focus:bg-surface-darker transition-all" placeholder="Where? (e.g. El Born, Barcelona)" type="text"/>
+<!-- Map Thumbnail hint -->
+<div class="absolute inset-y-2 right-2 w-12 rounded-lg overflow-hidden border border-white/10 opacity-60">
+<img class="w-full h-full object-cover" data-alt="Map view showing streets" data-location="Barcelona" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCC7bcZBXDzT7aMbPRgfEBUxkZx6s9efY4WCYK5g4fDNN4oT1t146Ld6A9D78oPoJuzbITpW5Kog9AYW0ZKN9ddW_-1jHdMlUa2vnHov5pRlpDcZvwnA7RqgcKYXuiMkOysbNTP6iX_okmm_izgogVYkDYR1DiQ3nlX_R0KJcWYwQ7hd5y4jvADgzoYYE-6SHsNstSuiVn_2oVKQ6FzejjtvWQOguuFgRIfqFwuFqq7qhv357k6gK4d3h06J29vEB8kl1sppfQuRCM"/>
+</div>
+</div>
+<!-- Time Input -->
+<div class="flex space-x-3">
+<div class="relative group w-2/3">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+<span class="material-icons-round text-primary/60 group-focus-within:text-primary transition-colors">calendar_today</span>
+</div>
+<input class="block w-full pl-12 pr-4 py-4 bg-surface-dark border-0 rounded-xl text-white placeholder-white/30 focus:ring-2 focus:ring-primary focus:bg-surface-darker transition-all" readonly="" type="text" value="Tonight"/>
+</div>
+<div class="relative group w-1/3">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-icons-round text-primary/60 group-focus-within:text-primary transition-colors">schedule</span>
+</div>
+<input class="block w-full pl-10 pr-2 py-4 bg-surface-dark border-0 rounded-xl text-white placeholder-white/30 focus:ring-2 focus:ring-primary focus:bg-surface-darker transition-all text-center font-medium" type="text" value="22:00"/>
+</div>
+</div>
+</section>
+<!-- Section 3: The Crowd (Sliders) -->
+<section class="mb-8 space-y-8 p-6 bg-surface-dark rounded-2xl border border-white/5">
+<!-- Participants Slider -->
+<div>
+<div class="flex justify-between items-center mb-4">
+<label class="text-sm font-medium text-white/80">Max Participants</label>
+<span class="bg-primary text-white text-xs font-bold px-3 py-1 rounded-full">6 People</span>
+</div>
+<div class="relative h-2 bg-background-dark rounded-full">
+<div class="absolute top-0 left-0 h-full bg-primary rounded-full" style="width: 30%;"></div>
+<input class="absolute w-full h-full opacity-0 cursor-pointer z-10" max="20" min="2" type="range" value="6"/>
+<!-- Custom styled thumb visual purely for CSS demonstration since input range styling is tricky inline -->
+<div class="absolute top-1/2 -translate-y-1/2 left-[30%] w-6 h-6 bg-white border-4 border-primary rounded-full shadow-lg pointer-events-none transform -translate-x-1/2"></div>
+</div>
+<div class="flex justify-between mt-2 text-xs text-white/30 font-medium">
+<span>2</span>
+<span>20+</span>
+</div>
+</div>
+<!-- Energy Level Slider -->
+<div>
+<div class="flex justify-between items-center mb-4">
+<label class="text-sm font-medium text-white/80">Energy Level</label>
+<span class="text-white/60 text-xs flex items-center"><span class="w-2 h-2 rounded-full bg-yellow-400 mr-2"></span>Chill Vibe</span>
+</div>
+<div class="relative h-12 bg-background-dark rounded-xl flex items-center px-4 overflow-hidden">
+<!-- Gradient Background for Energy -->
+<div class="absolute inset-0 bg-gradient-to-r from-blue-500 via-primary to-orange-500 opacity-20"></div>
+<input class="w-full h-1 bg-transparent appearance-none cursor-pointer z-10 [&amp;::-webkit-slider-thumb]:bg-white [&amp;::-webkit-slider-thumb]:shadow-lg" max="100" min="1" type="range" value="30"/>
+</div>
+<div class="flex justify-between mt-2 text-xs text-white/30 font-medium">
+<span>Low Key</span>
+<span>Wild</span>
+</div>
+</div>
+</section>
+<!-- Section 4: Safety (Toggle) -->
+<section class="mb-10">
+<div class="flex items-center justify-between p-4 bg-surface-dark rounded-xl border border-white/5">
+<div class="flex items-center">
+<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mr-3 text-primary">
+<span class="material-icons-round">verified_user</span>
+</div>
+<div class="flex flex-col">
+<span class="text-sm font-semibold text-white">Approval Required</span>
+<span class="text-xs text-white/50">Curate your crowd for safety</span>
+</div>
+</div>
+<!-- Toggle Switch -->
+<label class="inline-flex relative items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+</section>
+<!-- Floating Footer Action -->
+<div class="fixed bottom-0 left-0 w-full p-5 bg-gradient-to-t from-background-dark via-background-dark to-transparent z-50 flex justify-center">
+<button class="w-full max-w-md bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-full shadow-neon transform transition-all active:scale-[0.98] flex items-center justify-center space-x-2 text-lg">
+<span>Publish Plan</span>
+<span class="material-icons-round text-xl">arrow_forward</span>
+</button>
+</div>
+</div>
+</body></html>

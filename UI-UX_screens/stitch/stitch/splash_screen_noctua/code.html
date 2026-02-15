@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Noctua Splash Screen</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+            extend: {
+                colors: {
+                "primary": "#f4258c",
+                "background-light": "#f8f5f7",
+                "background-dark": "#221019",
+                },
+                fontFamily: {
+                "display": ["Plus Jakarta Sans"]
+                },
+                borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                backgroundImage: {
+                    'splash-gradient': 'linear-gradient(180deg, #221019 0%, #3a1525 100%)',
+                }
+            },
+            },
+        }
+    </script>
+<style>
+        /* Custom styles to ensure full height on mobile */
+        body, html {
+            height: 100%;
+            margin: 0;
+            overflow: hidden; /* Prevent scrolling on splash */
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display antialiased text-slate-900 dark:text-white h-full w-full relative">
+<!-- Splash Screen Container -->
+<!-- Utilizing the theme's background-dark as the base, adding a subtle gradient for the 'night' feel -->
+<main class="h-full w-full flex flex-col items-center justify-center relative overflow-hidden bg-background-dark">
+<!-- Ambient Glow Effects -->
+<!-- Top right glow -->
+<div class="absolute -top-20 -right-20 w-80 h-80 bg-primary/20 rounded-full blur-[100px] pointer-events-none opacity-60"></div>
+<!-- Bottom left glow -->
+<div class="absolute -bottom-20 -left-20 w-96 h-96 bg-primary/10 rounded-full blur-[120px] pointer-events-none opacity-40"></div>
+<!-- Center Content Wrapper -->
+<div class="z-10 flex flex-col items-center justify-center space-y-8 animate-fade-in-up">
+<!-- Logo Container -->
+<div class="relative group">
+<!-- Inner Glow behind logo -->
+<div class="absolute inset-0 bg-primary/30 rounded-full blur-2xl transform scale-110 group-hover:scale-125 transition-transform duration-700"></div>
+<!-- Logo Shape -->
+<div class="relative w-32 h-32 bg-background-dark border border-primary/20 rounded-full flex items-center justify-center shadow-[0_0_40px_-10px_rgba(244,37,140,0.5)]">
+<!-- SVG Owl Icon -->
+<svg class="w-16 h-16 text-primary" fill="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+<path d="M12 16V12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+<path d="M12 8H12.01" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path>
+<!-- Stylized eyes/wings abstraction -->
+<path d="M7 9C7 9 8.5 11 10 11C11.5 11 12 9 12 9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+<path d="M17 9C17 9 15.5 11 14 11C12.5 11 12 9 12 9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+</div>
+<!-- Text Content -->
+<div class="text-center space-y-2 mt-4">
+<h1 class="text-5xl font-extrabold tracking-tight text-white drop-shadow-lg">
+                    Noctua
+                </h1>
+<p class="text-lg text-primary/80 font-medium tracking-wide">
+                    Your night starts here
+                </p>
+</div>
+</div>
+<!-- Bottom Loading Indicator / Safe Area Spacer -->
+<div class="absolute bottom-12 flex flex-col items-center gap-4">
+<!-- Simple loading spinner -->
+<div class="w-6 h-6 border-2 border-primary/30 border-t-primary rounded-full animate-spin"></div>
+<!-- Version number or small footer text (optional for splash) -->
+<span class="text-xs text-white/20 font-light tracking-widest uppercase">v1.0.2</span>
+</div>
+</main>
+<!-- Background Pattern Overlay (Optional for texture) -->
+<div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-[0.03] pointer-events-none mix-blend-overlay"></div>
+</body></html>

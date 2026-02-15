@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>User Profile Screen</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Icons -->
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+            extend: {
+                colors: {
+                    "primary": "#f4258c",
+                    "background-light": "#f8f5f7",
+                    "background-dark": "#221019",
+                    "surface-dark": "#2D1622", // A slightly lighter shade for cards
+                },
+                fontFamily: {
+                    "display": ["Plus Jakarta Sans", "sans-serif"]
+                },
+                borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+            },
+            },
+        }
+    </script>
+<style>
+        /* Hide scrollbar for clean UI */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        /* Custom gradient text */
+        .text-gradient {
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-image: linear-gradient(to right, #f4258c, #ff8ba7);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-800 dark:text-white min-h-screen flex justify-center">
+<!-- Mobile Container -->
+<div class="w-full max-w-md bg-background-light dark:bg-background-dark shadow-2xl overflow-hidden relative min-h-screen">
+<!-- Header Actions (Absolute) -->
+<div class="absolute top-0 left-0 w-full p-6 flex justify-between items-center z-20 pt-12">
+<button class="w-10 h-10 rounded-full bg-black/20 backdrop-blur-md border border-white/10 flex items-center justify-center text-white hover:bg-primary/20 transition-colors">
+<span class="material-icons-round text-xl">arrow_back</span>
+</button>
+<div class="flex gap-3">
+<button class="w-10 h-10 rounded-full bg-black/20 backdrop-blur-md border border-white/10 flex items-center justify-center text-white hover:bg-primary/20 transition-colors">
+<span class="material-icons-round text-lg">edit</span>
+</button>
+<button class="w-10 h-10 rounded-full bg-black/20 backdrop-blur-md border border-white/10 flex items-center justify-center text-white hover:bg-primary/20 transition-colors">
+<span class="material-icons-round text-lg">settings</span>
+</button>
+</div>
+</div>
+<!-- Hero Section with Background Blur -->
+<div class="relative">
+<!-- Background Image Blur -->
+<div class="absolute inset-0 h-[320px] overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-b from-transparent via-background-dark/50 to-background-dark z-10"></div>
+<img alt="Abstract colorful blurred background derived from profile" class="w-full h-full object-cover opacity-60 filter blur-xl scale-110" data-alt="Abstract colorful blurred background derived from profile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCERbrCN7iENucyIQkhuXJ2IuZEyvbttdDT2PpsGNIqZi2UdTyu19nvkZ9sKEW8mbI8ntYZCxQd3-mk756D-ZLV23Vw6DicE5KKP3tCCouGDGhjuc3o_o6HbsbZVerrRNWNxut1qIPux5MshU8Ef3bRc3oVLxCdGApKKb1CWqvLxAmCdbqMi0uI2-06djo3WMvLMq16MMKhqAPJ81pNF62-g0jY_sytTGhj4gGPUyAlOChNK6z7uv9CC4giUo_a_slGbxjpC-zmn9k"/>
+</div>
+<!-- Profile Content -->
+<div class="relative z-10 pt-28 px-6 flex flex-col items-center">
+<!-- Avatar Container -->
+<div class="relative mb-4">
+<div class="w-32 h-32 rounded-full p-1 bg-gradient-to-br from-primary to-purple-600 shadow-[0_0_40px_-10px_rgba(244,37,140,0.5)]">
+<img alt="Young woman smiling in outdoor setting" class="w-full h-full rounded-full object-cover border-4 border-background-dark" data-alt="Young woman smiling in outdoor setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCIO2Ta7Hv_QXGw7xxVYA6AT5LFi16oOp0gIhbIY5hQ2S3X4mK42HoZ2KkfNby8or4Vx-AtVT_me1UnScdwHAgswDqy2gC1w_yaHw1Nff5JDI_ph6FdfpuhLgUrHo8ilrjvcOj-1Y7oHjHWUe0UAlTf-rS-A7JW2pa7gdRTfi_h-gSM0C19RbiAUVkuFZThAb5jzZ46p19ExDtgkJ_ZtMrpPKO0BjMTSs5NUrzGUhtJKSkGx1wZZHp47ozRLOmQz-vXkJZ59WQQTB0"/>
+</div>
+<!-- Verified Badge -->
+<div class="absolute bottom-0 right-0 translate-x-1 translate-y-1 bg-background-dark rounded-full p-1.5 shadow-lg">
+<div class="bg-primary text-white w-7 h-7 rounded-full flex items-center justify-center">
+<span class="material-icons-round text-sm">verified</span>
+</div>
+</div>
+</div>
+<!-- Name & Location -->
+<div class="text-center mb-8">
+<h1 class="text-3xl font-bold text-white mb-1">Elena M. <span class="text-xl font-normal text-white/60">24</span></h1>
+<div class="flex items-center justify-center text-primary/80 text-sm font-medium bg-primary/10 px-3 py-1 rounded-full w-max mx-auto border border-primary/20">
+<span class="material-icons-round text-sm mr-1">location_on</span>
+                        Berlin, Germany
+                    </div>
+</div>
+<!-- Stats Grid -->
+<div class="w-full grid grid-cols-3 gap-3 mb-8">
+<!-- Stat 1 -->
+<div class="bg-surface-dark/50 backdrop-blur-sm border border-white/5 rounded-2xl p-4 flex flex-col items-center justify-center">
+<span class="text-2xl font-bold text-white mb-1">12</span>
+<span class="text-xs text-white/50 font-medium">Plans Joined</span>
+</div>
+<!-- Stat 2 (Highlight) -->
+<div class="bg-primary/10 backdrop-blur-sm border border-primary/20 rounded-2xl p-4 flex flex-col items-center justify-center relative overflow-hidden">
+<div class="absolute inset-0 bg-primary/5 blur-xl"></div>
+<span class="text-2xl font-bold text-primary mb-1">98%</span>
+<span class="text-xs text-primary/80 font-medium flex items-center">
+                            Trust Score
+                            <span class="material-icons-round text-[10px] ml-1">info</span>
+</span>
+</div>
+<!-- Stat 3 -->
+<div class="bg-surface-dark/50 backdrop-blur-sm border border-white/5 rounded-2xl p-4 flex flex-col items-center justify-center">
+<span class="text-2xl font-bold text-white mb-1">45</span>
+<span class="text-xs text-white/50 font-medium">Friends Made</span>
+</div>
+</div>
+<!-- Bio Section -->
+<div class="w-full mb-8">
+<h2 class="text-sm font-bold text-white/40 uppercase tracking-wider mb-3 ml-1">About Me</h2>
+<p class="text-white/90 text-sm leading-relaxed mb-4">
+                        Techno enthusiast &amp; craft beer lover 🍻. Always down for a spontaneous rooftop adventure in Kreuzberg. Let's explore the city safely! ✨
+                    </p>
+<!-- Tags -->
+<div class="flex flex-wrap gap-2">
+<span class="px-4 py-2 rounded-full bg-surface-dark border border-white/10 text-xs font-medium text-white/80 hover:border-primary/50 transition-colors cursor-default">🎧 Techno Lover</span>
+<span class="px-4 py-2 rounded-full bg-surface-dark border border-white/10 text-xs font-medium text-white/80 hover:border-primary/50 transition-colors cursor-default">🦉 Late Nights</span>
+<span class="px-4 py-2 rounded-full bg-surface-dark border border-white/10 text-xs font-medium text-white/80 hover:border-primary/50 transition-colors cursor-default">🍺 Craft Beer</span>
+<span class="px-4 py-2 rounded-full bg-primary/20 border border-primary/30 text-xs font-medium text-primary hover:bg-primary/30 transition-colors cursor-default">🛡️ Safe Space</span>
+</div>
+</div>
+<!-- Past Plans Grid -->
+<div class="w-full pb-24">
+<div class="flex justify-between items-end mb-4">
+<h2 class="text-lg font-bold text-white">Recent Nights Out</h2>
+<a class="text-xs font-semibold text-primary hover:text-white transition-colors" href="#">View all</a>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<!-- Card 1 -->
+<div class="group relative aspect-[4/5] rounded-2xl overflow-hidden cursor-pointer">
+<img alt="Crowd dancing at a concert with purple lighting" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Crowd dancing at a concert with purple lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMcRD2wdq2sH2t9al4UX4IUkyy2SRXRoEWVBOKgD-fgZP2-mrevUdFORYxHOTLyqpshiw1cVLDQbrYY1n6gGjhUQT6CocwWbHEwTjeAz5z2h6fI36LJK64cLVx4XHWPwV54qdFG1Iybbud-Rk5wIanMHRN4B-YWKa5JwcluKkX8hf_RyL_VGusJ_BumuATGvZRDcSb8yB2OCeFSQemFPdFmBCkwO8_TAbEpx755ES-osJooPajZPP6R2fRlKesJ6_XlJWcJkWN-H0"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+<div class="absolute bottom-3 left-3 right-3">
+<span class="text-xs font-bold text-white block truncate">Techno Bunker Berlin</span>
+<span class="text-[10px] text-white/70 block">2 days ago</span>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="group relative aspect-[4/5] rounded-2xl overflow-hidden cursor-pointer">
+<img alt="People toasting drinks on a rooftop at sunset" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="People toasting drinks on a rooftop at sunset" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAr6UAll7CrDNEHA0l1WT2zTEgicvau_73IK9jq2_petC9Hy69FysnMpZMZu7d12UR92J8gWEfLsH7lWvwQ0FQ0aAQboiu_tO1nuXx6fqYyY-dCyCCIKreEkSe1jyTH28F7J3S3x4oeeZvatoHGMmUdoaMhDasjrrwe87irow4gu97aL_hk9K6P_CdtLGKD--SaADDQGHS5xScTkRHcH0HQTEXboIJDHW0az-VpdmnbkewHnkanZMIP7ysglpDcl_1zy0Hh1jGvXuU"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+<div class="absolute bottom-3 left-3 right-3">
+<span class="text-xs font-bold text-white block truncate">Rooftop Sundowners</span>
+<span class="text-[10px] text-white/70 block">Last week</span>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="group relative aspect-[4/5] rounded-2xl overflow-hidden cursor-pointer">
+<img alt="Group of friends laughing at a bar table" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Group of friends laughing at a bar table" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRZoiBbxOpmBZJhPtsFYeXGfiH8xO8i13vw0BdhZt_5VzNY9Wuu86Xv4jUBeuM_dSFv5pPQMyVZJMKSiJMH5tK0zSC7KrnoqSgnPC_7j_DzW765C0OA45tJWLyVrNtLy_a5G6hDdlIb74sSwWJow3M9DQH6cQBYmOOK_5acAIO7ZKFwyhSUMDwtkA2sNr9deJK-OIZ50TLMw4uZuoAUEmo1DytEE7ry_DgXAmirq150yUrLVK-HNWJ79gFpb_4q7r38nhc55v3u6A"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+<div class="absolute bottom-3 left-3 right-3">
+<span class="text-xs font-bold text-white block truncate">Jazz Bar &amp; Chill</span>
+<span class="text-[10px] text-white/70 block">2 weeks ago</span>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="group relative aspect-[4/5] rounded-2xl overflow-hidden cursor-pointer bg-surface-dark flex flex-col items-center justify-center border border-white/5 hover:bg-primary/10 hover:border-primary/30 transition-all">
+<div class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+<span class="material-icons-round text-white/50 group-hover:text-primary transition-colors">add_a_photo</span>
+</div>
+<span class="text-xs font-medium text-white/50 group-hover:text-primary transition-colors">Add Memory</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Floating Bottom Navigation -->
+<div class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-[360px] bg-surface-dark/90 backdrop-blur-xl border border-white/10 rounded-full shadow-2xl z-50 px-6 py-4 flex justify-between items-center">
+<button class="flex flex-col items-center justify-center gap-1 text-white/40 hover:text-white transition-colors">
+<span class="material-icons-round text-2xl">explore</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-1 text-white/40 hover:text-white transition-colors">
+<span class="material-icons-round text-2xl">local_activity</span>
+</button>
+<div class="w-12 h-12 rounded-full bg-gradient-to-tr from-primary to-purple-600 shadow-[0_0_15px_rgba(244,37,140,0.5)] flex items-center justify-center -mt-8 border-4 border-background-dark transform transition-transform hover:-translate-y-1">
+<span class="material-icons-round text-white text-2xl">add</span>
+</div>
+<button class="flex flex-col items-center justify-center gap-1 text-white/40 hover:text-white transition-colors relative">
+<div class="absolute top-0 right-0 w-2 h-2 bg-primary rounded-full"></div>
+<span class="material-icons-round text-2xl">chat_bubble</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-1 text-primary transition-colors">
+<span class="material-icons-round text-2xl">person</span>
+</button>
+</div>
+</div>
+</body></html>

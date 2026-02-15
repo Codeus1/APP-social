@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Plan Details View</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f4258c",
+                        "primary-content": "#ffffff",
+                        "background-light": "#f8f5f7",
+                        "background-dark": "#221019", // Deep wine/charcoal base
+                        "surface-dark": "#2d1622", // Slightly lighter for cards
+                        "neutral-800": "#3d202e",
+                        "neutral-700": "#522b3e",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "1.5rem", "xl": "2rem", "2xl": "2.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        /* Hide scrollbar for IE, Edge and Firefox */
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+        
+        .glass-panel {
+            background: rgba(45, 22, 34, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(244, 37, 140, 0.1);
+        }
+
+        .map-gradient-overlay {
+            background: linear-gradient(to top, #221019 0%, transparent 100%);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-white min-h-screen antialiased selection:bg-primary selection:text-white pb-24">
+<!-- Hero Section with Header Image -->
+<div class="relative w-full h-[45vh]">
+<!-- Image -->
+<div class="absolute inset-0 w-full h-full">
+<img alt="Nightclub crowd with laser lights" class="w-full h-full object-cover" data-alt="Dark moody nightclub with pink laser lights" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAcQSrlR6R0kdW8-ZbQz7wQiQAIbMW6wDuO9kmcr22PAFlcwTy1b3Q4NWY4LPF8MW-KYQzarW77yRx4xiumOJrDEjT40YI1RvfU15FzYGi190X5Hs2CUjGHjaSdJlT3lvNUrvDkgcg0gZVyF2v4OnFL8o_doq9JK1hl0iDLLX2UI6nVR5z7wK8EYklVqt8Rilp7mX6X93kLkXTNMc5ZlDQxzQwl1KGeQHyj6xwW9CbJ_mkuTU8zW76FwUdAU2MCKdOpu1oq2BuBHZE"/>
+<!-- Gradient Overlay for readability -->
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark via-background-dark/60 to-transparent"></div>
+</div>
+<!-- Sticky Header Navigation -->
+<div class="absolute top-0 left-0 right-0 p-6 flex justify-between items-center z-20 pt-12">
+<button class="bg-background-dark/30 backdrop-blur-md p-3 rounded-full hover:bg-background-dark/50 transition-colors border border-white/10 text-white">
+<span class="material-icons-round">arrow_back</span>
+</button>
+<div class="flex gap-3">
+<button class="bg-background-dark/30 backdrop-blur-md p-3 rounded-full hover:bg-background-dark/50 transition-colors border border-white/10 text-white">
+<span class="material-icons-outlined">favorite_border</span>
+</button>
+<button class="bg-background-dark/30 backdrop-blur-md p-3 rounded-full hover:bg-background-dark/50 transition-colors border border-white/10 text-white">
+<span class="material-icons-outlined">ios_share</span>
+</button>
+</div>
+</div>
+<!-- Hero Content (Positioned at bottom) -->
+<div class="absolute bottom-0 left-0 right-0 px-6 pb-4 z-10">
+<div class="flex items-center gap-2 mb-3">
+<span class="px-3 py-1 bg-primary text-white text-xs font-bold uppercase tracking-wider rounded-full">Tonight</span>
+<span class="px-3 py-1 bg-white/10 backdrop-blur-md text-white text-xs font-bold rounded-full border border-white/10">Techno</span>
+</div>
+<h1 class="text-4xl font-extrabold leading-tight mb-2 text-white">Electronic Night at Watergate</h1>
+<div class="flex items-center text-gray-300 text-sm font-medium">
+<span class="material-icons-round text-primary mr-1 text-base">schedule</span>
+                23:00 - 05:00
+                <span class="mx-2 text-gray-600">•</span>
+<span class="material-icons-round text-primary mr-1 text-base">place</span>
+                Kreuzberg, Berlin
+            </div>
+</div>
+</div>
+<!-- Main Content Container -->
+<div class="px-6 -mt-2 relative z-10 space-y-8">
+<!-- Host Card -->
+<div class="glass-panel p-4 rounded-xl flex items-center justify-between shadow-lg shadow-black/20">
+<div class="flex items-center gap-4">
+<div class="relative">
+<img alt="Profile picture of Marco" class="w-14 h-14 rounded-full border-2 border-primary object-cover" data-alt="Young man smiling portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCGkGTfLEzU2nWW85iQDI62jdspx04EIuSGsN09r3H-V_BSvkrcA_4iGS069gG5kGAWUIso2qRpiCs6X856K9Jves5gNdBIEfGcZM3DDra7UeZ4u5-Ejb3VI4-0pSUHudKTX8y-uoHE3Dx7dv8OljVZ09MktuX-USxtaAYroh6Dkcsb5ii4lGdmaGDuLhVlPw9X_b40kTeZPRwXsI9PZtjLDeGCJHwEtI1UEF2mU3PGSRjxRs-uGiLhikrj7mbHPCXiyV7SRu6ylFs"/>
+<div class="absolute -bottom-1 -right-1 bg-primary text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full border-2 border-surface-dark">
+                        HOST
+                    </div>
+</div>
+<div>
+<h3 class="text-lg font-bold text-white leading-tight">Marco <span class="text-gray-400 font-normal text-base">(24)</span></h3>
+<div class="flex items-center mt-1">
+<span class="material-icons-round text-yellow-400 text-sm mr-1">verified</span>
+<span class="text-xs text-primary font-bold tracking-wide">TRUST SCORE: 98%</span>
+</div>
+</div>
+</div>
+<button class="bg-white/5 hover:bg-white/10 text-white p-2 rounded-full transition-colors">
+<span class="material-icons-round">chat_bubble_outline</span>
+</button>
+</div>
+<!-- Description -->
+<div class="space-y-3">
+<h2 class="text-xl font-bold text-white">The Plan</h2>
+<p class="text-gray-300 leading-relaxed text-base font-light">
+                Spontaneous trip to catch the guest DJ set at Watergate. We are a mixed group of students and expats looking for good vibes only. We'll start with pre-drinks at Oberbaumbrücke around 21:00 to watch the sunset before heading in.
+            </p>
+</div>
+<!-- Vibe / Tags -->
+<div class="space-y-3">
+<h2 class="text-xl font-bold text-white">Group Vibe</h2>
+<div class="flex gap-3 overflow-x-auto no-scrollbar pb-1">
+<div class="flex-shrink-0 px-4 py-2.5 bg-neutral-800 rounded-full border border-neutral-700 flex items-center gap-2">
+<span class="text-xl">🌍</span>
+<span class="text-sm font-semibold text-gray-200">International</span>
+</div>
+<div class="flex-shrink-0 px-4 py-2.5 bg-neutral-800 rounded-full border border-neutral-700 flex items-center gap-2">
+<span class="text-xl">🏳️‍🌈</span>
+<span class="text-sm font-semibold text-gray-200">LGBTQ+ Friendly</span>
+</div>
+<div class="flex-shrink-0 px-4 py-2.5 bg-neutral-800 rounded-full border border-neutral-700 flex items-center gap-2">
+<span class="text-xl">🎓</span>
+<span class="text-sm font-semibold text-gray-200">20-25s</span>
+</div>
+<div class="flex-shrink-0 px-4 py-2.5 bg-neutral-800 rounded-full border border-neutral-700 flex items-center gap-2">
+<span class="text-xl">🕺</span>
+<span class="text-sm font-semibold text-gray-200">Dance</span>
+</div>
+</div>
+</div>
+<!-- Participants -->
+<div class="space-y-3">
+<div class="flex justify-between items-end">
+<h2 class="text-xl font-bold text-white">Who's Going</h2>
+<button class="text-primary text-sm font-bold hover:text-primary/80 transition-colors">See all</button>
+</div>
+<div class="bg-surface-dark p-5 rounded-xl border border-white/5">
+<div class="flex items-center justify-between">
+<div class="flex -space-x-4 overflow-hidden py-1">
+<img alt="Participant 1" class="inline-block h-12 w-12 rounded-full ring-2 ring-surface-dark object-cover" data-alt="Woman smiling" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDefet6_0RiT-O9MMoZl6G4oHkEEUZwrk3qf_26HhXXV4At8RRt_3Ac3tmwz77nYF_dOGyjbwRiYf3pFudQIFpcO_ner7vayWoCMGPpbSyqYhhRRP770zIHVY7cSYSYvNRuh9_BNFm3hCrmWEWVdjuOosMcARfu65K7pqIWwwQuH6kXb_i1ZL0t18FrwogfTxB5r9IxQbBQzK_5eKOkGRSDjzGT0yGg68z66QL8BgU8WER4KrwPH9JUc7rzwnXmZyKGeCpGsYYMFpo"/>
+<img alt="Participant 2" class="inline-block h-12 w-12 rounded-full ring-2 ring-surface-dark object-cover" data-alt="Man smiling" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDSo7IuYrF-9Jv2hEQxGdKCRfVbx1CuOxCR1w56zJ0yZp10q12mOkmUYkMayrk3WMfohlEUjzPhcYgjd2ZKqeRRWtsJn3-9TJp6q0y33gPRMBDx5A7YoB8BAdWlTxr9DVNss_Eb_Klx3X02JMqD4r1r2ZyPc4YuL_KHCFf0icJvL4-2atbihalReA1KD2Iy5I_8nHdlbsbVBNyeoEdXYj9RJpJ91JQ_1UCD8ZrnhSRWnDgwXiNhRc9Xaze_dRNG7vPyf8pHcMTL-XM"/>
+<img alt="Participant 3" class="inline-block h-12 w-12 rounded-full ring-2 ring-surface-dark object-cover" data-alt="Woman serious expression" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXzC66n92m3btrFqFLgZ3oqSraVGdhSVu10p0scFA4NG4PfEyVlJViJyTA2mU5CfAPYK7ZiJ0PME7jBf_ZD3wwIhiMwaCY4zo0SWfkFRhiDlLzp58GaCcyTaHQiOpEHfvXoSnTbPqalDLzy0hB-SEiQ_rbKwAatNqdeIK3Iwe4JGRW3QuLMB2EbjLSwIJbIVxtLyZm_dQ8-wwaY71hSvoSaMG3h5Q3xJtp3XR7n4zRt8-3Qu3dRUWx5SrXFznwVQIWM8Nr1Q92NTQ"/>
+<img alt="Participant 4" class="inline-block h-12 w-12 rounded-full ring-2 ring-surface-dark object-cover" data-alt="Man with beard" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAd7sM-BBk1iG0nMWa5OJq-VbVMmSXMwD5PI-6BgXVTldi-WQdMc4iauhwleCFDhUoetiUMI_oHrstsRmqyxMVhpZXnipcHYKlpS3ky2-gEErchPp8h6Ify8oO4K0LQETKzZH6Dx88FSvrIRHEIrPztk_M2hzYufMV2ORqzPFwhEpGxiAXU8BTA8vJfgLEkuoC1AZUhdHB1efVPyor_Fz6bvlRwKVsj39aCPL_YR0cAu7FlZ9eRNI3Q7o3aOJyHBDUaBLl3P2cg_qk"/>
+<div class="h-12 w-12 rounded-full ring-2 ring-surface-dark bg-neutral-700 flex items-center justify-center text-white text-xs font-bold z-10">
+                            +5
+                        </div>
+</div>
+<div class="text-right">
+<p class="text-white font-bold text-lg">9 Confirmed</p>
+<p class="text-gray-400 text-xs">3 spots left</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Location / Mini Map -->
+<div class="space-y-3 pb-8">
+<h2 class="text-xl font-bold text-white">Location</h2>
+<div class="relative w-full h-48 rounded-xl overflow-hidden border border-white/10 group">
+<img alt="Map showing location in Berlin" class="w-full h-full object-cover grayscale opacity-70 group-hover:opacity-100 group-hover:grayscale-0 transition-all duration-500" data-alt="Dark map of Berlin streets" data-location="Watergate, Berlin" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrPW6AvxrbtHFEAVuciVoqDaAlTUb9ac3tEhkEUvsB79zVpW4RfQsENhTEU0ZZ7-AwjgVkmLBkgWrtPy-h3ArAf4jqFIYeu146PMCq5V5L8zGs7vcplL54PlzIVbnVqykgecE1CBiz0WULcMA36GffkmIv1VYULCBjRvkdU7jlQQKYO31ONW3Vm9-nQB6lOzCVMUVyP5yHlJssTdAFRb-z1jbviAzIxpOdyDABVwohZWNm5biL5uqLlKBWhR3FSgQX9SoTCcsMAoA"/>
+<!-- Fallback Map Image since api key is placeholder -->
+<div class="absolute inset-0 bg-neutral-800" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCNLlNwUBApQzBbc7_81E-sH7AdWjQjEic7ymIbfZCTBa1iyOOsYnHV_cjRa3N75RluVElo__WceazXGcBW1otwmiH0qvT98-5f55bn8A4Tj5dLu-qZ4kPFJE643u0QttHiDw2ANBd4mbkeLS4oVjIo9as45W5TUKPGRmXhxGkPAJHMRuDvu8pH-l5l53AbuSDw_IK84f10PqF0w-tWdsFnRnOwAydwVYlj8m6-bJ1EVYDP-308kkTHaiQzlFRJucnXy0zkG2elJCQ'); background-size: cover; background-blend-mode: multiply; filter: grayscale(100%) invert(85%) contrast(150%);"></div>
+<div class="absolute inset-0 bg-black/20"></div>
+<!-- Custom Pin -->
+<div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
+<div class="w-10 h-10 bg-primary rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(244,37,140,0.6)] animate-pulse">
+<span class="material-icons-round text-white">place</span>
+</div>
+<div class="mt-1 bg-black/80 px-2 py-1 rounded text-[10px] text-white font-bold backdrop-blur-sm">Watergate</div>
+</div>
+<!-- Open in Maps Button -->
+<button class="absolute top-3 right-3 bg-white/10 backdrop-blur-md p-2 rounded-lg text-white hover:bg-white/20 transition-colors">
+<span class="material-icons-outlined text-sm">open_in_new</span>
+</button>
+</div>
+<p class="text-gray-400 text-sm">Falckensteinstraße 49, 10997 Berlin</p>
+</div>
+</div>
+<!-- Sticky Bottom CTA -->
+<div class="fixed bottom-0 left-0 right-0 p-6 pt-4 bg-gradient-to-t from-background-dark via-background-dark to-transparent z-50">
+<button class="w-full bg-primary hover:bg-primary/90 text-white font-bold text-lg py-4 rounded-full shadow-[0_4px_30px_rgba(244,37,140,0.4)] transition-transform transform active:scale-[0.98] flex items-center justify-center gap-2">
+            Request to Join
+            <span class="material-icons-round text-xl">arrow_forward</span>
+</button>
+<!-- Home Indicator Safe Space -->
+<div class="h-2"></div>
+</div>
+</body></html>

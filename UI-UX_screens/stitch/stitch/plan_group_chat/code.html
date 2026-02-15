@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Plan Group Chat</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts: Plus Jakarta Sans -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Icons -->
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f4258c",
+                        "background-light": "#f8f5f7",
+                        "background-dark": "#221019",
+                        "surface-dark": "#2d1b25", // Slightly lighter than background-dark for cards/headers
+                        "surface-light": "#ffffff",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem", 
+                        "lg": "2rem", 
+                        "xl": "3rem", 
+                        "full": "9999px"
+                    },
+                    backgroundImage: {
+                        'chat-gradient': 'linear-gradient(135deg, #4f46e5 0%, #9333ea 100%)', // Blue to Purple gradient for user bubbles
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar hiding for clean UI */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        /* Mobile height fix */
+        body, html {
+            height: 100%;
+            overflow: hidden;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white antialiased h-full flex justify-center">
+<!-- Mobile Device Container -->
+<div class="w-full max-w-md h-full flex flex-col relative bg-background-light dark:bg-background-dark shadow-2xl overflow-hidden">
+<!-- 1. Sticky Header -->
+<header class="flex-none px-4 pt-12 pb-4 bg-surface-light/90 dark:bg-surface-dark/90 backdrop-blur-md border-b border-primary/10 z-20">
+<div class="flex items-center justify-between">
+<button class="p-2 -ml-2 rounded-full hover:bg-primary/10 text-slate-500 dark:text-slate-400">
+<span class="material-icons-round">arrow_back_ios_new</span>
+</button>
+<div class="flex-1 flex flex-col items-center mx-2">
+<h1 class="text-lg font-bold text-center leading-tight">Techno Night at Berghain 🇩🇪</h1>
+<div class="flex items-center gap-1.5 mt-0.5">
+<span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+<span class="text-xs font-medium text-slate-500 dark:text-slate-400">12 Active</span>
+</div>
+</div>
+<button class="p-2 -mr-2 rounded-full hover:bg-primary/10 text-primary">
+<span class="material-icons-round">info</span>
+</button>
+</div>
+<!-- 2. Safety Status Bar (Collapsible/Integrated) -->
+<div class="mt-4 bg-primary/10 dark:bg-primary/5 rounded-lg p-2.5 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="flex -space-x-2">
+<img class="w-8 h-8 rounded-full border-2 border-surface-light dark:border-background-dark object-cover" data-alt="Female party goer avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCprM2DfhDJEe1bz9qtQhf0do2PQ1ceinNlXoB-6wYP3RG2ZtSwZf-PD8Imr0TQBcSndyDvc0qSZu76ratSk00otXZTNGbo8q3q356bJw_bzKapxqI104TjYdKrrEwl-IC-QuO2E1FhS6OpnRmHZKR0BLNw6Cws4nN2zPP-czJ0YdlMm-_fjvLtn8vHENCH4DswDghYii9E0ms3rq2x7BDQe_BK-mt6oEdq-peLfDecgGoMPj2Vc0LoxmTK2zYpujBMcJSnlVdj4XA"/>
+<img class="w-8 h-8 rounded-full border-2 border-surface-light dark:border-background-dark object-cover" data-alt="Male party goer avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCCkXN-De1opRqEKtUkztlejT8-oADwtX5bzGk8hdhxGBYaES1sfAQgHeNjZjv3pZi_OmcKv-5VoynRggyF9EIyEazJjamsa3czN0eGktrHUbn4W978rCe60Q6O-qnmI5VhfAWiXIxrTkoqpT4f2e8vHb764kJ0EOaOuRd5NfYiaBy5FLQC7WRqlzdy6Iur95zj0BiTcnU4hnxL-pvJR75f1uiP7CLzlpspJ9AarK5ql6YFNUKrRKRxmvTSQMEDIbdqO15FVYJYppU"/>
+<div class="w-8 h-8 rounded-full border-2 border-surface-light dark:border-background-dark bg-surface-dark flex items-center justify-center text-[10px] font-bold">+2</div>
+</div>
+<div>
+<p class="text-xs font-semibold text-primary">4/12 Arrived</p>
+<p class="text-[10px] text-slate-500 dark:text-slate-400">Locating others...</p>
+</div>
+</div>
+<button class="text-xs font-bold text-primary bg-primary/10 px-3 py-1.5 rounded-full">View Map</button>
+</div>
+</header>
+<!-- 3. Message List -->
+<main class="flex-1 overflow-y-auto no-scrollbar p-4 space-y-6 pb-32">
+<!-- Timestamp -->
+<div class="text-center">
+<span class="text-[10px] font-medium text-slate-400 bg-surface-dark px-3 py-1 rounded-full">Today, 10:45 PM</span>
+</div>
+<!-- Host Message Bubble (Left) -->
+<div class="flex gap-3 items-end">
+<div class="relative">
+<img class="w-10 h-10 rounded-full border-2 border-primary object-cover" data-alt="Host avatar woman" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7W3k-K0yzsv_m7sO0OpeEpQNuoeWFnPNqPX_uIkpC2CoPmm8VAU4adfdnpZguTkASoVZVjqN4H77wOVmMMosaqIL0WOWsOGAFgXMtee37t1clu8yPqc3YFgBcqLxjeIwOL2MyaHYAJsu8WlZDiZqdJwD9oyt2e8xYqiWwpvm17a2gNhp4TVrtegnLvZrzYzHguR0lZRCm-eVuUFQxILQ83KUeHsiVN4Jw7VFYvaWyUte2MyTmk9j3EKm56Ssa0EzuUS58qM2LYLM"/>
+<div class="absolute -bottom-1 -right-1 bg-primary text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full border border-background-dark">HOST</div>
+</div>
+<div class="flex flex-col gap-1 max-w-[75%]">
+<span class="text-xs font-bold text-primary ml-1">Anna (Organizer)</span>
+<div class="bg-surface-dark border border-primary/30 p-4 rounded-2xl rounded-bl-none text-sm leading-relaxed shadow-sm">
+<p>Hey everyone! We are meeting by the front lockers at 11 PM sharp. 🕒 Look for the glowing pink totem!</p>
+</div>
+</div>
+</div>
+<!-- Standard User Bubble (Left) -->
+<div class="flex gap-3 items-end">
+<img class="w-8 h-8 rounded-full bg-slate-700 object-cover" data-alt="Male user avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1kktBN5_M5boWFA3kkjbCIiD1NC9maJuXjgkSR2jRqSeQ7McV1QA0KFOJW6heH9emjZ9Ghwo7Y60zGj5GBH2Lm37Y-yGgNW-z3A35S58tfpB7Aj7TRycGpoayGJhddXsFCJZPXMc-oHEP2EKdTu2aRsZ4AUZpLlWzHPuRvHZQSq6jBJJdn_q4FUOqJgLF327wMdJNH4gAa6gD6iCjbmtXJ9aZfois92ShMl-dmH_2-JVVm_o7ejv5gCSwnHlQm_ojL_Oti7PZ5EM"/>
+<div class="flex flex-col gap-1 max-w-[75%]">
+<span class="text-xs text-slate-400 ml-1">Marcus</span>
+<div class="bg-surface-dark p-3 px-4 rounded-2xl rounded-bl-none text-sm text-slate-200">
+<p>Just hopped in the Uber. Traffic is crazy near the bridge 🚗</p>
+</div>
+</div>
+</div>
+<!-- Current User Bubble (Right) -->
+<div class="flex flex-row-reverse gap-3 items-end">
+<div class="flex flex-col gap-1 max-w-[75%] items-end">
+<div class="bg-chat-gradient text-white p-3 px-4 rounded-2xl rounded-br-none text-sm shadow-md">
+<p>Running 5 mins late! Save me a spot in line please 🙏</p>
+</div>
+<span class="text-[10px] text-slate-500 mr-1">Read 10:52 PM</span>
+</div>
+</div>
+<!-- System Message / Location Share -->
+<div class="flex justify-center my-4">
+<div class="bg-surface-dark border border-slate-700/50 p-1 pl-1 pr-4 rounded-full flex items-center gap-3 max-w-[90%]">
+<div class="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400">
+<span class="material-icons-round text-sm">my_location</span>
+</div>
+<span class="text-xs text-slate-300"><strong>Sarah</strong> shared their live location.</span>
+</div>
+</div>
+<!-- Standard User Bubble (Left) - Arrival -->
+<div class="flex gap-3 items-end">
+<img class="w-8 h-8 rounded-full bg-slate-700 object-cover" data-alt="Female user avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOFB3UBFrEIVAj_oXr4mSCuXk6akxAmdenvamWwxqvdEZFL3eslZWNEP33qJN0eQr5U2743EGFerDnNbLCq-D32IkXn8RbJgjqgnNdva4X5y3GuiWYnZycCc7twsclAR6bUOOcG8GVF4GjDvMh1g66XSX8D-hGxK2Q3OglC5POTya3SvRPZu3oZ8imVu_od--h-SXazG9W-TIVqDYwQC8YpN9snffz9UEUZ7GgoBTSZaNfA2MTjJlKQtVRr6-kCGcWWvasn191vLE"/>
+<div class="flex flex-col gap-1 max-w-[75%]">
+<span class="text-xs text-slate-400 ml-1">Elena</span>
+<div class="bg-surface-dark p-3 px-4 rounded-2xl rounded-bl-none text-sm text-slate-200">
+<p>I'm here! Standing next to the big poster.</p>
+</div>
+</div>
+</div>
+<!-- Current User Bubble (Right) -->
+<div class="flex flex-row-reverse gap-3 items-end">
+<div class="flex flex-col gap-1 max-w-[75%] items-end">
+<div class="bg-chat-gradient text-white p-3 px-4 rounded-2xl rounded-br-none text-sm shadow-md">
+<p>Almost there!</p>
+</div>
+</div>
+</div>
+</main>
+<!-- 4. Quick Actions Dock & Input Area (Fixed Bottom) -->
+<div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-background-dark via-background-dark to-transparent pt-12 pb-6 px-4 z-30">
+<!-- Quick Actions -->
+<div class="flex gap-3 mb-4 overflow-x-auto no-scrollbar">
+<button class="flex-none flex items-center gap-2 bg-surface-dark border border-primary/30 hover:bg-primary/10 active:scale-95 transition-transform px-4 py-2.5 rounded-full shadow-lg">
+<span class="material-icons-round text-primary text-sm">share_location</span>
+<span class="text-xs font-bold text-white">Share Location</span>
+</button>
+<button class="flex-none flex items-center gap-2 bg-primary hover:bg-primary/90 active:scale-95 transition-transform px-5 py-2.5 rounded-full shadow-lg shadow-primary/20">
+<span class="material-icons-round text-white text-sm">check_circle</span>
+<span class="text-xs font-bold text-white">I've Arrived</span>
+</button>
+</div>
+<!-- Input Bar -->
+<div class="flex items-end gap-2 bg-surface-dark/90 backdrop-blur border border-white/5 p-1.5 rounded-full shadow-xl">
+<button class="p-2.5 rounded-full text-slate-400 hover:text-white hover:bg-white/10 transition-colors">
+<span class="material-icons-round">add</span>
+</button>
+<div class="flex-1 py-2.5">
+<input class="w-full bg-transparent border-none p-0 text-sm text-white placeholder-slate-500 focus:ring-0" placeholder="Message the group..." type="text"/>
+</div>
+<button class="p-2.5 rounded-full text-slate-400 hover:text-white hover:bg-white/10 transition-colors">
+<span class="material-icons-round text-[20px]">mic</span>
+</button>
+<button class="p-2.5 rounded-full bg-primary text-white hover:bg-primary/90 transition-colors shadow-lg">
+<span class="material-icons-round text-[20px] ml-0.5">send</span>
+</button>
+</div>
+<!-- Home Indicator Area Spacer -->
+<div class="h-2 w-full"></div>
+</div>
+</div>
+</body></html>

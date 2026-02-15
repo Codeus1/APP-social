@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Main Plans Feed</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f4258c",
+                        "background-light": "#f8f5f7",
+                        "background-dark": "#221019",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar hiding for horizontal scroll */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-800 dark:text-slate-200 antialiased selection:bg-primary selection:text-white">
+<!-- Container mimicking a mobile phone screen -->
+<div class="max-w-md mx-auto min-h-screen relative pb-24 bg-background-light dark:bg-background-dark overflow-hidden shadow-2xl">
+<!-- Header Section -->
+<header class="fixed top-0 w-full max-w-md z-30 bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-md border-b border-primary/10 transition-all duration-300">
+<div class="px-6 pt-12 pb-4">
+<div class="flex justify-between items-center mb-4">
+<div>
+<p class="text-xs font-semibold text-primary uppercase tracking-wider">Current Location</p>
+<div class="flex items-center gap-1 cursor-pointer group">
+<h1 class="text-2xl font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors">Paris, France 🇫🇷</h1>
+<span class="material-icons text-slate-400 group-hover:text-primary transition-colors">expand_more</span>
+</div>
+</div>
+<div class="relative">
+<div class="w-10 h-10 rounded-full bg-gradient-to-tr from-primary to-purple-600 p-[2px]">
+<img alt="User Profile" class="w-full h-full rounded-full object-cover border-2 border-background-dark" data-alt="Young woman profile picture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCO8wP6xMdXwrO6KRR0tGkKTzo6UwIBHaHqF4l9o2qzSXmXbqvZS59x4xH2knLyWkx3xizjZ7tlTjcv2fkzW7BaPrmoQlmjCZ5Ttk_cEbEARft-D8MfJvYEIfZgzBl00oYKLFfw-8fa4Lgg0IDZsPARLHluJA6sCcb-85NpPKsIZu35x1c7sXWvojnwmWDl_1vZwF5OLhCBr14rlQ5SYMuvHFCc9TqcN9gD54LcCHbCaBvPneeY1zLGZicsBGy_ihjaEpcL-LCHCBY"/>
+</div>
+<span class="absolute top-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-background-dark"></span>
+</div>
+</div>
+<!-- Search Bar -->
+<div class="relative mb-4 group">
+<span class="material-icons absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors">search</span>
+<input class="w-full bg-slate-200/50 dark:bg-white/5 border-0 text-slate-900 dark:text-white placeholder-slate-500 rounded-full py-3.5 pl-12 pr-12 focus:ring-2 focus:ring-primary focus:bg-white dark:focus:bg-white/10 transition-all" placeholder="Find techno, rooftop bars, chill..." type="text"/>
+<button class="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-slate-300/50 dark:bg-white/10 hover:bg-primary hover:text-white rounded-full transition-colors text-slate-500">
+<span class="material-icons text-[20px]">tune</span>
+</button>
+</div>
+<!-- Filter Chips -->
+<div class="flex gap-3 overflow-x-auto no-scrollbar pb-1 mask-linear-fade">
+<button class="flex-shrink-0 px-5 py-2 rounded-full bg-primary text-white font-medium text-sm shadow-lg shadow-primary/25 border border-primary">
+                        For You
+                    </button>
+<button class="flex-shrink-0 px-5 py-2 rounded-full bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 font-medium text-sm whitespace-nowrap hover:border-primary/50 transition-colors">
+                        Tonight 🌙
+                    </button>
+<button class="flex-shrink-0 px-5 py-2 rounded-full bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 font-medium text-sm whitespace-nowrap hover:border-primary/50 transition-colors">
+                        Near Me 📍
+                    </button>
+<button class="flex-shrink-0 px-5 py-2 rounded-full bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 font-medium text-sm whitespace-nowrap hover:border-primary/50 transition-colors">
+                        Cheap €
+                    </button>
+<button class="flex-shrink-0 px-5 py-2 rounded-full bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 font-medium text-sm whitespace-nowrap hover:border-primary/50 transition-colors">
+                        High Energy ⚡️
+                    </button>
+</div>
+</div>
+</header>
+<!-- Main Feed Content -->
+<main class="pt-64 px-4 pb-8 space-y-6">
+<!-- Card 1: Featured/Trending -->
+<article class="relative group bg-white dark:bg-white/5 border border-slate-100 dark:border-white/10 rounded-lg overflow-hidden shadow-xl shadow-slate-200/50 dark:shadow-black/50 transition-transform active:scale-[0.98]">
+<!-- Image Header -->
+<div class="h-48 relative overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent z-10"></div>
+<img alt="Rooftop bar at night with string lights" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="Atmospheric rooftop bar with string lights at night" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZdRF9NUKsnBwRlhL8-8HB8HMpv_yKan2e8rms_OhkrpmXYtYFDjV4jkxeE3IfuL28_bBd30ZthZCO9q1cOO_W6wKe3q0XCN5bL1244sGPdUmwqiPFlGB1Miwtnkstl0cOlUC_ARqsIGfGHf0qdgppz2JFcZWdUn4h0OpLOTlK7aUImzWNXdM5J4USj3ZkMW51GZ-ZAx-IQQrb5odf5KfixrZGja7rsJWsamiErR5sCrYDpS9RzIIEhcqjXg29g3BymtCkHXQgJMw"/>
+<div class="absolute top-4 left-4 z-20 bg-black/60 backdrop-blur-md text-white text-xs font-bold px-3 py-1.5 rounded-full border border-white/10 flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                        HAPPENING NOW
+                    </div>
+<div class="absolute top-4 right-4 z-20 flex flex-col items-end gap-2">
+<div class="bg-primary/90 backdrop-blur text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg shadow-primary/20">
+                            94% Match
+                        </div>
+</div>
+</div>
+<!-- Body -->
+<div class="p-5 relative">
+<!-- Host Info (Floating overlap) -->
+<div class="absolute -top-10 right-5 z-20 flex flex-col items-center">
+<div class="relative w-16 h-16 rounded-full p-1 bg-background-light dark:bg-[#2c1521]">
+<img alt="Host Sophie" class="w-full h-full rounded-full object-cover border-2 border-primary" data-alt="Portrait of a smiling young woman" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB92mKnjv2o05TxDqnGJWTEP2dkrISe1VTNpdhUznslKgj_AwWtQWBcQfmlivJ6RWqzsEsW5GZW78suhuRhA00NucNKs4KhE3t_DYvzDZcUi0EQaP1ldt4RZKPxiSidEdcDYs1MbaZSrkSuod0hcOZG86UJD7nCgI2rjTGEJoWkrI4Q8-ibRCWjsOPSHWDnC2B6GV5pkfUxQ7UCSM71YfGI0UWREAyUc242rP6s3UveFfx9bodrKVWYM4fMzer359vbhNVY3xXjhnE"/>
+<div class="absolute bottom-0 right-0 bg-blue-500 text-white p-1 rounded-full border-2 border-background-dark" title="Verified Host">
+<span class="material-icons text-[10px] leading-none block">check</span>
+</div>
+</div>
+<span class="text-[10px] font-bold mt-1 text-primary bg-primary/10 px-2 py-0.5 rounded-full">HOST</span>
+</div>
+<div class="pr-16">
+<h2 class="text-xl font-bold text-slate-900 dark:text-white leading-tight mb-1">Rooftop Jazz &amp; Wine 🎷</h2>
+<div class="flex items-center gap-3 text-sm text-slate-500 dark:text-slate-400 mb-4">
+<span class="flex items-center gap-1">
+<span class="material-icons-outlined text-base">schedule</span> Starts in 1h
+                            </span>
+<span class="w-1 h-1 rounded-full bg-slate-600"></span>
+<span>Le Marais</span>
+</div>
+</div>
+<!-- Tags -->
+<div class="flex flex-wrap gap-2 mb-5">
+<span class="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold border border-primary/20">Chill Vibe</span>
+<span class="px-3 py-1 rounded-full bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300 text-xs font-bold border border-slate-200 dark:border-white/5">€€ Moderate</span>
+<span class="px-3 py-1 rounded-full bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300 text-xs font-bold border border-slate-200 dark:border-white/5">25-30 y/o</span>
+</div>
+<!-- Map Snippet & Attendees -->
+<div class="flex gap-3 h-20 mb-4">
+<div class="w-1/3 relative rounded-2xl overflow-hidden border border-slate-200 dark:border-white/10 group-hover:border-primary/30 transition-colors">
+<img alt="Map Location" class="w-full h-full object-cover opacity-60 grayscale hover:grayscale-0 transition-all" data-alt="Dark map style showing street layout" data-location="Paris, Le Marais" onerror="this.src='https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&amp;fit=crop&amp;w=300&amp;q=80'" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAw_0HNvKrSSOGxgczIxH5pu_Yn0gvLxzL5a_d8hZ2rut97nVBrSYmpF1H_jLHuA4PGbtx8Qac5SreeLvXSKvlbEwk70OcCDswazO1NlSRLmw6Bb7c68IrTX_QIdXEa_SqWCuj8Zzi3s8jzKBG4A4gkafQXnk6e2uyoZRcOdttLJXNqmi5R9ALgw6Fyg1ITG-sNs0bhhe9k-cAUkCAU7NQ_cm4FQSBeu9sqhlkPHNxdxfiH_WNhQtjfO-dhIEbfjhMjbFvy7IazWgQ"/>
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center animate-pulse">
+<span class="w-3 h-3 bg-primary rounded-full border-2 border-white"></span>
+</span>
+</div>
+</div>
+<div class="w-2/3 bg-slate-100 dark:bg-white/5 rounded-2xl p-3 flex flex-col justify-center border border-slate-200 dark:border-white/5">
+<div class="flex items-center justify-between mb-2">
+<span class="text-xs font-semibold text-slate-500 dark:text-slate-400">Who's going</span>
+<span class="text-[10px] font-bold bg-green-500/10 text-green-500 px-2 py-0.5 rounded-full border border-green-500/20">6 spots left</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex -space-x-2 overflow-hidden">
+<img alt="Attendee" class="inline-block h-8 w-8 rounded-full ring-2 ring-background-light dark:ring-[#291520] object-cover" data-alt="Young man portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCDf9KVgrKs4tk8LG7U8c-6rdUslCgZvWGvPgr7tRLwiCJzfQLQ6_8IP9TsebgU6wdTc4tcWCXGNFZbJDzytcGovrIFCpA35kNb5Sf_9mAA_965ZtZMItQNhhtS42Jm05sFp4Wq5JeySL5jpccfXZNdwbyhdi_kWvTtWbuD7T03QIqLfOkqyvbGdp_PkxpnlB33yWUfDVFmkSuci78GWTb0VSgCgtw0mwoMPbgwyFZmjPotAOghfrcx25reVvm2sycr4QRzQ3NzvOE"/>
+<img alt="Attendee" class="inline-block h-8 w-8 rounded-full ring-2 ring-background-light dark:ring-[#291520] object-cover" data-alt="Young woman portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvNMHPtySG5jPnlpnyxdzCkLNqOLbkFnFE0xXmrqJtFGw7ORsTmqnDC_qVK_FGhhXCZRIS5Dw3uGiY2JlRDArCS6PH52BUp2p9zhvS2bEKcS7XH9EYqMV1at7YkwWykp5yjC2BncvqK_-I3H_iRXn-FxOYgnnZBmTA6mUb7lBmKEqkPfopK9bwrhg1aMnZz1d4mZ60XNp0RixTbFNbIxQdflr4uJTgT-BG5oBRZ5eVAYzsNpT1HjeGpy-9JFZzDBTUA_ubT3YQm8w"/>
+<img alt="Attendee" class="inline-block h-8 w-8 rounded-full ring-2 ring-background-light dark:ring-[#291520] object-cover" data-alt="Man smiling portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCthzVgjIG9NzMtikDSGuQycdHDGpW3QGT0PBqqZiqbSVbpWIbci4bZpQk4iVybVqnVe47DwE86bpSCnSC-BMpN82SXa4_VS0mXBFm4qwI1JYWIfQc_0nC72Z3yfr8sFtceghEofG2LquZcelRbrUBaP-xVGmEmHTt2h4aoBjuoht3NoAQms6ADWgygKYE7sSos_MN7SDkrHRRYbWTtauLxVvxOOwBq1NDBV9Unh3MpKeOfC3oYn23Y7-v_U2YNT_DcRcq7qPNV8qs"/>
+<div class="h-8 w-8 rounded-full ring-2 ring-background-light dark:ring-[#291520] bg-slate-700 flex items-center justify-center text-[10px] font-bold text-white">+8</div>
+</div>
+<div class="text-[10px] font-medium text-slate-400">
+<span class="text-primary font-bold">60%</span> 👩 / 40% 👨
+                                </div>
+</div>
+</div>
+</div>
+<!-- Action -->
+<button class="w-full bg-slate-900 dark:bg-white text-white dark:text-background-dark font-bold py-3 rounded-full hover:bg-primary hover:text-white dark:hover:bg-primary dark:hover:text-white transition-colors flex items-center justify-center gap-2 shadow-lg shadow-black/20">
+                        Request to Join
+                        <span class="material-icons text-sm">arrow_forward</span>
+</button>
+</div>
+</article>
+<!-- Card 2: High Energy -->
+<article class="relative group bg-white dark:bg-white/5 border border-slate-100 dark:border-white/10 rounded-lg overflow-hidden shadow-xl shadow-slate-200/50 dark:shadow-black/50 transition-transform active:scale-[0.98]">
+<div class="p-5">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-3">
+<div class="relative">
+<img alt="Host Max" class="w-12 h-12 rounded-full object-cover border-2 border-primary" data-alt="Portrait of a young man with glasses" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB8vTsNHf2QApIUXQNxGjAcEif25TVqJ30uOkWbgCNyFGhgyltlWsz9bfN7O1bWZptYdKwZDDorNlpHFNQPlRVGpBYnd2oBJBSabJzJbMjeCQTtSUtImelKnPfNsXn2hhgiUNyuv5Gof3ZGJfMjDHqpX2urRlQneZKgLs00IgOHWveUiVDy_7ZufLyEA5Jx4Y8hx5hZWLJIsIxq4RzcJrW2QoLWzqAPFkUpLtZSmMIS1ic2VkNWUrgNiof4c0GuiaBynBTu-fkfBts"/>
+<div class="absolute -bottom-1 -right-1 bg-primary text-white p-0.5 rounded-full border-2 border-background-dark">
+<span class="material-icons text-[10px] leading-none block">star</span>
+</div>
+</div>
+<div>
+<h3 class="text-sm font-bold text-slate-900 dark:text-white">Hosted by Max</h3>
+<p class="text-xs text-slate-500 dark:text-slate-400">Ambassador • 4.9 ★</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-lg font-bold text-primary">23:30</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">Tonight</p>
+</div>
+</div>
+<h2 class="text-xl font-bold text-slate-900 dark:text-white mb-2">Underground Techno 🔊</h2>
+<p class="text-sm text-slate-500 dark:text-slate-400 mb-4 line-clamp-2">Looking for a squad to hit Tresor tonight. Strict door policy, dress code black. Let's dance until sunrise!</p>
+<div class="flex gap-2 mb-4 overflow-x-auto no-scrollbar">
+<span class="px-3 py-1 rounded-full bg-purple-500/10 text-purple-400 text-xs font-bold border border-purple-500/20 whitespace-nowrap">High Energy ⚡️</span>
+<span class="px-3 py-1 rounded-full bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300 text-xs font-bold border border-slate-200 dark:border-white/5 whitespace-nowrap">€€€ Expensive</span>
+<span class="px-3 py-1 rounded-full bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300 text-xs font-bold border border-slate-200 dark:border-white/5 whitespace-nowrap">Techno</span>
+</div>
+<div class="bg-gradient-to-r from-primary/20 to-purple-900/40 rounded-2xl p-4 border border-primary/20 relative overflow-hidden">
+<div class="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+<div class="relative z-10 flex justify-between items-center">
+<div class="flex -space-x-3">
+<img alt="Attendee" class="inline-block h-10 w-10 rounded-full ring-2 ring-primary/30 object-cover" data-alt="Portrait of woman looking cool" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDjVlyelHmrUMdhRIIbYpeIEff8szfXH9M16djs_aJZ1YeKqki4ij7zhlUibPkipejvuzr75HXoToIXkZB5aowVyFGvk80M4pbm8IL_SDpSLD-sPjgLv1-CC9KuJEC1aGl6OjTFcpmaEByFpV5ge0iM9khQsoreQmei1uO0FANk_Z48Ra7Za3mXGsrY0lmh5guZ1r604lpFfzqoZc9HtGM5De0LQ124ueeS79emG5oeaIssIMpRX0W7H8KxrGXF5x0N-8nv1stWyLY"/>
+<img alt="Attendee" class="inline-block h-10 w-10 rounded-full ring-2 ring-primary/30 object-cover" data-alt="Portrait of man with beard" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDMz087RWDNGprDfXbbs_Aj2tG12PmBSVncBWx_KguEXOeuclpRLf5GLqR4elitrryynBO7zw1OKSeL8yo9TuRg70LANYzhG6JOtAzOPfwtT-gqpDrVLLRMfRubtbvxKsy7sbr_gOFOT8TG4dh7VUdkTJLZ1brezx4XD2k7IGNMos_T1s4hvJwh3iz64YnyBR4b7GZJQLvZKcIM_Pj5PHQlPKJReR4zbnesbgl-LIhN_85TFjMmms367-CFBuESt9gsBgjYT6fDM8Q"/>
+<div class="h-10 w-10 rounded-full ring-2 ring-primary/30 bg-primary flex items-center justify-center text-xs font-bold text-white">Join</div>
+</div>
+<div class="text-right">
+<p class="text-xs font-bold text-white uppercase tracking-wide opacity-80">Gender Ratio</p>
+<p class="text-sm font-bold text-white">50% 👩 / 50% 👨</p>
+</div>
+</div>
+</div>
+</div>
+</article>
+<!-- Card 3: Late Night -->
+<article class="relative group bg-white dark:bg-white/5 border border-slate-100 dark:border-white/10 rounded-lg overflow-hidden shadow-xl shadow-slate-200/50 dark:shadow-black/50 transition-transform active:scale-[0.98]">
+<div class="flex h-32">
+<div class="w-32 relative">
+<img alt="Street food stall at night" class="w-full h-full object-cover" data-alt="Close up of delicious street food at night" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6fAv6LYpPs3EfBcrp9sBosPpJ7BgRf5fSUP3RloUJgRoIxEoTPejHac7ZPoclJXVFaBNsGoyWNRtFOzcnQpNLoMabJdTRnZtu5mTwolRyBf35BKvC6Ef4EoVdWw8TkgOK5OpgjG5fGkeMoBNlnRLibmspfGTBDo6PgbzD_R7Hd9OfR6W5eVQFzmgn-ad6Nr3TMI77gN6yWUzLJVPySac7XikgpjO28ttfsZ6txyjA4KiNcOhnIVIX1DT0actm7DUcH4Iq8x5AZ_w"/>
+<div class="absolute top-2 left-2 bg-black/60 backdrop-blur rounded-full px-2 py-0.5 text-[10px] font-bold text-white">01:00</div>
+</div>
+<div class="flex-1 p-4 flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start">
+<h2 class="text-lg font-bold text-slate-900 dark:text-white leading-tight">Late Night Food Run 🥙</h2>
+<img alt="Host Elena" class="w-6 h-6 rounded-full object-cover border border-slate-500" data-alt="Female profile picture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAw-AfEU4MYhNSSU-hHD0OVeTTyOMUWViUQLdcT35O-B6trpy6XZE2l3GDi0fZOfsNsBgeao4ZdApFTc_Xey29coBxDw0BzrnQS1y74sZ0ri2BO8e8Zsx3wdbXbb_ua-o4oOHhCl9CjntWHD9KU0HyzFxHQtfuXruwI_hFmAsfj2S8hxuaEFWCfKqnC66j82fVwzLtYeKxpCntga7yfbIdxixjfw3nv_MNUOqqi_x5UQRs8zArarXJy3PbF9tyE4L0VAKW2Ab_slZc"/>
+</div>
+<p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Bastille • 2km away</p>
+</div>
+<div class="flex justify-between items-end mt-2">
+<div class="flex items-center gap-2">
+<span class="text-xs font-bold bg-green-500/10 text-green-500 px-2 py-0.5 rounded-full border border-green-500/20">€ Cheap</span>
+<span class="text-xs text-slate-400">Social</span>
+</div>
+<button class="w-8 h-8 rounded-full bg-slate-200 dark:bg-white/10 hover:bg-primary hover:text-white flex items-center justify-center transition-colors">
+<span class="material-icons text-sm">add</span>
+</button>
+</div>
+</div>
+</div>
+</article>
+<!-- Footer Spacing -->
+<div class="h-8"></div>
+</main>
+<!-- Floating Action Button -->
+<button class="fixed bottom-24 right-6 w-14 h-14 bg-primary rounded-full shadow-lg shadow-primary/40 flex items-center justify-center text-white z-40 hover:scale-110 transition-transform active:scale-95 group">
+<span class="material-icons text-2xl group-hover:rotate-90 transition-transform">add</span>
+</button>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 w-full max-w-md bg-background-light/80 dark:bg-[#180b12]/90 backdrop-blur-xl border-t border-slate-200 dark:border-white/5 pb-6 pt-4 px-6 flex justify-between items-center z-50">
+<button class="flex flex-col items-center gap-1 text-primary group">
+<span class="material-icons text-2xl group-hover:scale-110 transition-transform">explore</span>
+<span class="text-[10px] font-bold">Feed</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors group">
+<span class="material-icons-outlined text-2xl group-hover:scale-110 transition-transform">map</span>
+<span class="text-[10px] font-medium">Map</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors group">
+<div class="relative">
+<span class="material-icons-outlined text-2xl group-hover:scale-110 transition-transform">chat_bubble_outline</span>
+<span class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-primary rounded-full border-2 border-background-dark"></span>
+</div>
+<span class="text-[10px] font-medium">Chats</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors group">
+<span class="material-icons-outlined text-2xl group-hover:scale-110 transition-transform">person_outline</span>
+<span class="text-[10px] font-medium">Profile</span>
+</button>
+</nav>
+<!-- Gradient overlay at the bottom for smooth scroll fade -->
+<div class="fixed bottom-20 w-full max-w-md h-12 bg-gradient-to-t from-background-light dark:from-background-dark to-transparent pointer-events-none z-30"></div>
+</div>
+</body></html>
