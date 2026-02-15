@@ -1,6 +1,5 @@
 ﻿import { useLocalSearchParams } from 'expo-router';
-import { Text, View } from 'react-native';
-
+import { StyleSheet, Text, View } from 'react-native';
 
 import { usePlanQuery } from '@/features/plans/hooks';
 import { noctuaColors } from '@/lib/theme/tokens';
@@ -13,7 +12,7 @@ export default function PlanDetailScreen() {
   if (!plan) {
     return (
       <ScreenContainer>
-        <Text selectable style={{ color: noctuaColors.text, fontSize: 22, fontWeight: '800' }}>
+        <Text selectable style={styles.notFoundText}>
           Plan no encontrado
         </Text>
       </ScreenContainer>
@@ -21,24 +20,24 @@ export default function PlanDetailScreen() {
   }
 
   return (
-    <ScreenContainer style={{ gap: 18 }}>
-      <View style={{ gap: 8 }}>
-        <Text selectable style={{ color: noctuaColors.text, fontSize: 30, fontWeight: '800' }}>
+    <ScreenContainer>
+      <View style={styles.headerBlock}>
+        <Text selectable style={styles.planTitle}>
           {plan.title}
         </Text>
-        <Text selectable style={{ color: noctuaColors.textMuted, fontWeight: '600' }}>
+        <Text selectable style={styles.planHost}>
           Hosted by {plan.host} • {plan.location}
         </Text>
       </View>
 
-      <View style={{ gap: 10, backgroundColor: noctuaColors.surface, borderRadius: 20, padding: 16, borderWidth: 1, borderColor: noctuaColors.border }}>
-        <Text selectable style={{ color: noctuaColors.primary, fontWeight: '700' }}>
+      <View style={styles.detailCard}>
+        <Text selectable style={styles.detailTime}>
           {plan.startsAt}
         </Text>
-        <Text selectable style={{ color: noctuaColors.text, lineHeight: 22 }}>
+        <Text selectable style={styles.detailDescription}>
           {plan.description}
         </Text>
-        <Text selectable style={{ color: noctuaColors.textMuted, fontVariant: ['tabular-nums'] }}>
+        <Text selectable style={styles.detailAttendees}>
           {plan.attendees}/{plan.maxAttendees} asistentes
         </Text>
       </View>
@@ -46,3 +45,42 @@ export default function PlanDetailScreen() {
   );
 }
 
+const styles = StyleSheet.create({
+  notFoundText: {
+    color: noctuaColors.text,
+    fontSize: 22,
+    fontWeight: '800',
+  },
+  headerBlock: {
+    gap: 8,
+  },
+  planTitle: {
+    color: noctuaColors.text,
+    fontSize: 30,
+    fontWeight: '800',
+  },
+  planHost: {
+    color: noctuaColors.textMuted,
+    fontWeight: '600',
+  },
+  detailCard: {
+    gap: 10,
+    backgroundColor: noctuaColors.surface,
+    borderRadius: 20,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: noctuaColors.border,
+  },
+  detailTime: {
+    color: noctuaColors.primary,
+    fontWeight: '700',
+  },
+  detailDescription: {
+    color: noctuaColors.text,
+    lineHeight: 22,
+  },
+  detailAttendees: {
+    color: noctuaColors.textMuted,
+    fontVariant: ['tabular-nums'],
+  },
+});

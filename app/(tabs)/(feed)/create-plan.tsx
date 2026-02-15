@@ -1,7 +1,7 @@
 ﻿import { useState } from 'react';
-import { Alert, Pressable, Text, TextInput, View } from 'react-native';
+import { Alert, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
-import { noctuaColors } from '@/lib/theme/tokens';
+import { noctuaColors, noctuaRadii } from '@/lib/theme/tokens';
 import { ScreenContainer } from '@/components/ui/screen-container';
 
 export default function CreatePlanScreen() {
@@ -9,18 +9,18 @@ export default function CreatePlanScreen() {
   const [location, setLocation] = useState('');
 
   return (
-    <ScreenContainer style={{ flex: 1, padding: 16, gap: 16, backgroundColor: noctuaColors.background }}>
-      <View style={{ gap: 6 }}>
-        <Text selectable style={{ color: noctuaColors.text, fontSize: 28, fontWeight: '800' }}>
+    <ScreenContainer>
+      <View style={styles.headerBlock}>
+        <Text selectable style={styles.heading}>
           Let&apos;s make a plan
         </Text>
-        <Text selectable style={{ color: noctuaColors.textMuted, fontSize: 14 }}>
+        <Text selectable style={styles.subheading}>
           Crea el mood para esta noche con estilo Noctua.
         </Text>
       </View>
 
-      <View style={{ gap: 10 }}>
-        <Text selectable style={{ color: noctuaColors.text, fontWeight: '700' }}>
+      <View style={styles.fieldGroup}>
+        <Text selectable style={styles.fieldLabel}>
           Título
         </Text>
         <TextInput
@@ -28,20 +28,12 @@ export default function CreatePlanScreen() {
           onChangeText={setTitle}
           placeholder="Ej: Tapas & Sangría"
           placeholderTextColor={noctuaColors.textMuted}
-          style={{
-            backgroundColor: noctuaColors.surface,
-            borderRadius: 16,
-            borderWidth: 1,
-            borderColor: noctuaColors.border,
-            color: noctuaColors.text,
-            paddingHorizontal: 14,
-            paddingVertical: 12,
-          }}
+          style={styles.textInput}
         />
       </View>
 
-      <View style={{ gap: 10 }}>
-        <Text selectable style={{ color: noctuaColors.text, fontWeight: '700' }}>
+      <View style={styles.fieldGroup}>
+        <Text selectable style={styles.fieldLabel}>
           Ubicación
         </Text>
         <TextInput
@@ -49,29 +41,17 @@ export default function CreatePlanScreen() {
           onChangeText={setLocation}
           placeholder="Ej: El Born, Barcelona"
           placeholderTextColor={noctuaColors.textMuted}
-          style={{
-            backgroundColor: noctuaColors.surface,
-            borderRadius: 16,
-            borderWidth: 1,
-            borderColor: noctuaColors.border,
-            color: noctuaColors.text,
-            paddingHorizontal: 14,
-            paddingVertical: 12,
-          }}
+          style={styles.textInput}
         />
       </View>
 
       <Pressable
-        onPress={() => Alert.alert('Plan publicado', `${title || 'Nuevo plan'} en ${location || 'ubicación pendiente'}`)}
-        style={{
-          backgroundColor: noctuaColors.primary,
-          borderRadius: 999,
-          paddingVertical: 14,
-          alignItems: 'center',
-          marginTop: 4,
-        }}
+        onPress={() =>
+          Alert.alert('Plan publicado', `${title || 'Nuevo plan'} en ${location || 'ubicación pendiente'}`)
+        }
+        style={styles.submitButton}
       >
-        <Text selectable style={{ color: '#fff', fontSize: 16, fontWeight: '800' }}>
+        <Text selectable style={styles.submitButtonText}>
           Publicar plan
         </Text>
       </Pressable>
@@ -79,3 +59,45 @@ export default function CreatePlanScreen() {
   );
 }
 
+const styles = StyleSheet.create({
+  headerBlock: {
+    gap: 6,
+  },
+  heading: {
+    color: noctuaColors.text,
+    fontSize: 28,
+    fontWeight: '800',
+  },
+  subheading: {
+    color: noctuaColors.textMuted,
+    fontSize: 14,
+  },
+  fieldGroup: {
+    gap: 10,
+  },
+  fieldLabel: {
+    color: noctuaColors.text,
+    fontWeight: '700',
+  },
+  textInput: {
+    backgroundColor: noctuaColors.surface,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: noctuaColors.border,
+    color: noctuaColors.text,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+  },
+  submitButton: {
+    backgroundColor: noctuaColors.primary,
+    borderRadius: noctuaRadii.button,
+    paddingVertical: 14,
+    alignItems: 'center',
+    marginTop: 4,
+  },
+  submitButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '800',
+  },
+});
