@@ -1,4 +1,4 @@
-﻿import { Stack } from 'expo-router';
+import { Stack } from 'expo-router';
 
 import { noctuaColors } from '@/lib/theme/tokens';
 

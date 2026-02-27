@@ -1,4 +1,4 @@
-﻿import { Link } from 'expo-router';
+import { Link } from 'expo-router';
 import { Text, View } from 'react-native';
 
 import { noctuaColors } from '@/lib/theme/tokens';

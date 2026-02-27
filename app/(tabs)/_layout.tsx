@@ -1,11 +1,13 @@
-﻿import { Tabs } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
+import { Tabs } from 'expo-router';
+import { AntDesign } from '@expo/vector-icons';
+import { Platform } from 'react-native';
 
 import { noctuaColors } from '@/lib/theme/tokens';
 
 export default function TabsLayout() {
   return (
     <Tabs
+      detachInactiveScreens={Platform.OS !== 'web'}
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: noctuaColors.primary,
@@ -22,7 +24,7 @@ export default function TabsLayout() {
         options={{
           title: 'Feed',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="sparkles" size={size} color={color} />
+            <AntDesign name="appstore" size={size} color={color} />
           ),
         }}
       />
@@ -31,7 +33,7 @@ export default function TabsLayout() {
         options={{
           title: 'Map',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="map" size={size} color={color} />
+            <AntDesign name="environment" size={size} color={color} />
           ),
         }}
       />
@@ -40,7 +42,7 @@ export default function TabsLayout() {
         options={{
           title: 'Chats',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="chatbubble" size={size} color={color} />
+            <AntDesign name="message" size={size} color={color} />
           ),
         }}
       />
@@ -49,7 +51,7 @@ export default function TabsLayout() {
         options={{
           title: 'Perfil',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="person-circle" size={size} color={color} />
+            <AntDesign name="user" size={size} color={color} />
           ),
         }}
       />

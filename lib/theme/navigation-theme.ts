@@ -1,4 +1,4 @@
-﻿import { DarkTheme, Theme } from '@react-navigation/native';
+import { DarkTheme, Theme } from '@react-navigation/native';
 
 import { noctuaColors } from '@/lib/theme/tokens';
 

@@ -1,4 +1,4 @@
-﻿import { Link } from 'expo-router';
+import { Link } from 'expo-router';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 
 import { noctuaColors } from '@/lib/theme/tokens';
@@ -36,7 +36,7 @@ export default function OnboardingScreen() {
         </Text>
       </View>
 
-      <Link href="/(tabs)/(feed)" asChild>
+      <Link href="/(auth)/login" asChild>
         <Pressable style={{ backgroundColor: noctuaColors.primary, borderRadius: 999, paddingVertical: 14, alignItems: 'center', marginTop: 6 }}>
           <Text selectable style={{ color: '#fff', fontWeight: '800', fontSize: 16 }}>
             Continuar

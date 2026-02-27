@@ -1,4 +1,4 @@
-﻿import { Link } from 'expo-router';
+import { Link } from 'expo-router';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 
 import { noctuaColors } from '@/lib/theme/tokens';
@@ -43,10 +43,10 @@ export default function SplashScreen() {
             </Text>
           </Pressable>
         </Link>
-        <Link href="/(tabs)/(feed)" asChild>
+        <Link href="/(auth)/login" asChild>
           <Pressable style={{ borderRadius: 999, borderWidth: 1, borderColor: noctuaColors.border, paddingVertical: 14, alignItems: 'center' }}>
             <Text selectable style={{ color: noctuaColors.text, fontWeight: '700' }}>
-              Ir directo al feed
+              Iniciar sesión
             </Text>
           </Pressable>
         </Link>

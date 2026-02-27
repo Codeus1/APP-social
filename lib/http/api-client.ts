@@ -1,4 +1,4 @@
-﻿export class ApiError extends Error {
+export class ApiError extends Error {
   status: number;
   code?: string;
 

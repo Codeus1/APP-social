@@ -1,4 +1,4 @@
-﻿export const noctuaColors = {
+export const noctuaColors = {
   primary: '#f4258c',
   background: '#221019',
   backgroundSoft: '#2b1522',

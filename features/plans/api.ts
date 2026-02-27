@@ -1,39 +1,11 @@
-﻿import { ApiError, apiRequest } from '@/lib/http/api-client';
-import { mockPlans } from '@/features/plans/mock-data';
-import { Plan } from '@/features/plans/types';
+/**
+ * Plans API — now handled entirely by tRPC.
+ *
+ * The tRPC client (lib/trpc/client.ts) and React hooks (features/plans/hooks.ts)
+ * replace the previous HTTP-based fetch functions.
+ *
+ * This file is kept as a placeholder. If you need imperative (non-hook) access
+ * to the tRPC client in the future, you can set up a vanilla tRPC client here.
+ */
 
-type PlansResponse = { plans: Plan[] };
-type PlanResponse = { plan: Plan };
-
-const apiBase = process.env.EXPO_PUBLIC_API_URL?.replace(/\/$/, '');
-
-function resolveApiPath(path: string) {
-  if (apiBase) {
-    return `${apiBase}${path}`;
-  }
-
-  if (typeof window !== 'undefined') {
-    return path;
-  }
-
-  throw new ApiError('EXPO_PUBLIC_API_URL is not configured', 0, 'MISSING_API_URL');
-}
-
-export async function fetchPlans(): Promise<Plan[]> {
-  try {
-    const data = await apiRequest<PlansResponse>(resolveApiPath('/api/plans'));
-    return data.plans;
-  } catch {
-    return mockPlans;
-  }
-}
-
-export async function fetchPlanById(planId: string): Promise<Plan | null> {
-  try {
-    const data = await apiRequest<PlanResponse>(resolveApiPath(`/api/plans/${planId}`));
-    return data.plan;
-  } catch {
-    return mockPlans.find((item) => item.id === planId) ?? null;
-  }
-}
-
+export {};
