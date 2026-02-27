@@ -44,6 +44,7 @@ interface AuthContextValue extends AuthState {
     bootstrap: () => Promise<void>;
     signIn: (email: string, password: string) => Promise<void>;
     register: (email: string, password: string) => Promise<void>;
+    requestPasswordReset: (email: string) => Promise<void>;
     signOut: () => Promise<void>;
 }
 
@@ -161,6 +162,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
     }, []);
 
+    const requestPasswordReset = useCallback(async (email: string) => {
+        const redirectTo = process.env.EXPO_PUBLIC_SUPABASE_PASSWORD_REDIRECT_URL;
+
+        const { error } = await supabaseClient.auth.resetPasswordForEmail(
+            email,
+            redirectTo ? { redirectTo } : undefined,
+        );
+
+        if (error) throw new Error(error.message);
+    }, []);
+
     const signOut = useCallback(async () => {
         await supabaseClient.auth.signOut();
         setState({ isLoading: false, user: null, accessToken: null });
@@ -172,9 +184,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             bootstrap,
             signIn,
             register,
+            requestPasswordReset,
             signOut,
         }),
-        [bootstrap, register, signIn, signOut, state],
+        [bootstrap, register, requestPasswordReset, signIn, signOut, state],
     );
 
     return (

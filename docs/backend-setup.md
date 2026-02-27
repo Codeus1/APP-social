@@ -1,43 +1,38 @@
-# Backend Setup (Supabase + Vercel)
+# Backend Setup (Expo API Routes + Supabase)
+
+This project now uses a single backend architecture:
+
+- `app/api/trpc/[trpc]+api.ts` for API routes in Expo Router
+- `server/routers/*` for tRPC procedures
+- Supabase client auth directly in the app (`lib/auth/auth-context.tsx`)
 
 ## Supabase
 
 1. Create a Supabase project.
 2. In **Project Settings → API** copy:
-   - `Project URL` → `SUPABASE_URL` and `EXPO_PUBLIC_SUPABASE_URL`
-   - `anon public` key → `SUPABASE_ANON_KEY` and `EXPO_PUBLIC_SUPABASE_ANON_KEY`
-   - `service_role` key → `SUPABASE_SERVICE_ROLE_KEY`
-3. In **Authentication → URL Configuration** set a redirect URL for password reset (e.g. `noctua://reset-password` or a web URL).
+   - `Project URL` → `EXPO_PUBLIC_SUPABASE_URL`
+   - `publishable/anon key` → `EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
+3. In **Authentication → URL Configuration** configure a reset password redirect URL, for example:
+   - `noctua://reset-password` (native deep link)
+   - or your web app URL
 
 ## Environment variables
 
 Fill `.env.local` using `.env.example`:
 
 ```
-EXPO_PUBLIC_API_URL=http://localhost:3000
 EXPO_PUBLIC_SUPABASE_URL=...
-EXPO_PUBLIC_SUPABASE_ANON_KEY=...
-SUPABASE_URL=...
-SUPABASE_ANON_KEY=...
-SUPABASE_SERVICE_ROLE_KEY=...
-SUPABASE_PASSWORD_REDIRECT_URL=...
+EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY=...
+EXPO_PUBLIC_SUPABASE_PASSWORD_REDIRECT_URL=noctua://reset-password
+SUPABASE_PROJECT_ID=...
 ```
-
-## Vercel deploy
-
-1. Install Vercel CLI and login.
-2. Configure environment variables in the Vercel project (same as above).
-3. Deploy from repo root.
-
-The backend endpoints are in `/api/auth/*` and follow the OpenAPI contract in [`openapi.yaml`](../openapi.yaml).
 
 ## Local run
 
-Start Expo and Vercel functions:
+Start the Expo server:
 
-```
+```bash
 npm run start
-vercel dev --listen 3000
 ```
 
-The app uses `EXPO_PUBLIC_API_URL` to call the backend.
+Expo serves both app routes and `app/api/*` routes.

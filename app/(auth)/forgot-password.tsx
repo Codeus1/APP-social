@@ -2,29 +2,11 @@ import { Link } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 
-import { apiRequest } from '@/lib/http/api-client';
+import { useAuth } from '@/lib/auth/auth-context';
 import { noctuaColors } from '@/lib/theme/tokens';
 
-function resolveApiBaseUrl(): string {
-  const envUrl = process.env.EXPO_PUBLIC_API_URL?.trim();
-
-  if (!envUrl) return '';
-
-  if (envUrl.startsWith('http://') || envUrl.startsWith('https://')) {
-    return envUrl;
-  }
-
-  return `http://${envUrl}`;
-}
-
-const API_BASE_URL = resolveApiBaseUrl();
-
-function buildUrl(path: string): string {
-  if (!API_BASE_URL) return path;
-  return `${API_BASE_URL}${path}`;
-}
-
 export default function ForgotPasswordScreen() {
+  const { requestPasswordReset } = useAuth();
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
@@ -34,11 +16,7 @@ export default function ForgotPasswordScreen() {
     setMessage(null);
 
     try {
-      await apiRequest(buildUrl('/api/auth/forgot-password'), {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email.trim() }),
-      });
+      await requestPasswordReset(email.trim());
       setMessage('Hemos enviado un email para restablecer tu contraseña.');
     } catch (error) {
       setMessage(error instanceof Error ? error.message : 'No se pudo enviar el email.');

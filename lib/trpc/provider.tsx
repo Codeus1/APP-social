@@ -1,7 +1,6 @@
 import { QueryClient } from '@tanstack/react-query';
 import { httpBatchLink } from '@trpc/client';
 import React, { useState } from 'react';
-import { Platform } from 'react-native';
 import superjson from 'superjson';
 
 import { trpc } from './client';
@@ -12,10 +11,6 @@ function getBaseUrl() {
     if (typeof window !== 'undefined') {
         // browser should use relative url
         return '';
-    }
-
-    if (process.env.EXPO_PUBLIC_API_URL) {
-        return process.env.EXPO_PUBLIC_API_URL;
     }
 
     const debuggerHost = Constants.expoConfig?.hostUri;
