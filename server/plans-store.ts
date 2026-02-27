@@ -180,6 +180,38 @@ export function createPlan(
         distance: '0 km',
     };
     plans.push(plan);
-    plans.push(plan);
     return plan;
+}
+
+export function joinPlan(id: string): Plan {
+    const plan = plans.find((p) => p.id === id);
+    if (!plan) {
+        throw new Error('Plan not found');
+    }
+
+    if (plan.attendees >= plan.maxAttendees) {
+        throw new Error('Plan is full');
+    }
+
+    plan.attendees += 1;
+    return plan;
+}
+
+export function updatePlan(id: string, updates: Partial<Plan>): Plan {
+    const planIndex = plans.findIndex((p) => p.id === id);
+    if (planIndex === -1) {
+        throw new Error('Plan not found');
+    }
+
+    const updatedPlan = { ...plans[planIndex], ...updates };
+    plans[planIndex] = updatedPlan;
+    return updatedPlan;
+}
+
+export function deletePlan(id: string): void {
+    const planIndex = plans.findIndex((p) => p.id === id);
+    if (planIndex === -1) {
+        throw new Error('Plan not found');
+    }
+    plans.splice(planIndex, 1);
 }
