@@ -6,12 +6,7 @@ trigger: always_on
 
 This document outlines the standardized rules and guidelines for developing mobile applications using Expo and React Native. These rules are designed to ensure consistency, maintainability, performance, accessibility, and error-free development across all projects. They apply to all Expo-based React Native apps and are crafted to minimize troubleshooting efforts and enforce best practices.
 
-## Cursor Adherence
-
-- **Mandatory Compliance**: Cursor must read and strictly follow all rules in this document for every Expo and React Native project.
-- **Self-Check**: Before generating code or modifying a project, Cursor must verify that its actions align with these guidelines.
-- **Error Prevention**: If Cursor detects a potential violation of these rules (e.g., creating a new project inside an existing one), it must halt and prompt the user for clarification instead of proceeding.
-- **Documentation Reference**: Cursor must reference this document (`cursor-rules.md`) when suggesting project changes or scaffolding to ensure compliance.
+Whenever possible, use your skills to leave the code professional and with zero errors or bad practices.
 
 ## Code Style and Structure
 

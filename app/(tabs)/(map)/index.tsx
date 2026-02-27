@@ -77,7 +77,9 @@ export default function MapScreen() {
             if (
                 !plan.title.toLowerCase().includes(query) &&
                 !plan.location.toLowerCase().includes(query) &&
-                !plan.tags.some((tag) => tag.toLowerCase().includes(query))
+                !plan.tags.some((tag: string) =>
+                    tag.toLowerCase().includes(query),
+                )
             ) {
                 return false;
             }

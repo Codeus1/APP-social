@@ -13,6 +13,8 @@ interface BasicDetailsFormProps {
     onLocationChange: (text: string) => void;
     onDateChange: (text: string) => void;
     onTimeChange: (text: string) => void;
+    titleError?: string;
+    locationError?: string;
 }
 
 export function BasicDetailsForm({
@@ -26,17 +28,24 @@ export function BasicDetailsForm({
     onLocationChange,
     onDateChange,
     onTimeChange,
+    titleError,
+    locationError,
 }: BasicDetailsFormProps) {
     return (
         <View style={styles.section}>
             <Text style={styles.sectionTitle}>The Basics</Text>
 
             {/* Title Input */}
-            <View style={styles.inputRow}>
+            <View
+                style={[
+                    styles.inputRow,
+                    titleError ? styles.inputRowError : null,
+                ]}
+            >
                 <AntDesign
                     name="edit"
                     size={16}
-                    color={noctuaColors.textMuted}
+                    color={titleError ? '#ff4444' : noctuaColors.textMuted}
                     style={styles.inputIcon}
                 />
                 <TextInput
@@ -47,6 +56,7 @@ export function BasicDetailsForm({
                     style={styles.textInput}
                 />
             </View>
+            {titleError && <Text style={styles.errorText}>{titleError}</Text>}
 
             {/* Description Input */}
             <View style={[styles.inputRow, styles.descriptionRow]}>
@@ -69,11 +79,16 @@ export function BasicDetailsForm({
             </View>
 
             {/* Location Input */}
-            <View style={styles.inputRow}>
+            <View
+                style={[
+                    styles.inputRow,
+                    locationError ? styles.inputRowError : null,
+                ]}
+            >
                 <AntDesign
                     name="environment"
                     size={16}
-                    color={noctuaColors.textMuted}
+                    color={locationError ? '#ff4444' : noctuaColors.textMuted}
                     style={styles.inputIcon}
                 />
                 <TextInput
@@ -84,6 +99,9 @@ export function BasicDetailsForm({
                     style={styles.textInput}
                 />
             </View>
+            {locationError && (
+                <Text style={styles.errorText}>{locationError}</Text>
+            )}
 
             {/* Date & Time Row */}
             <View style={styles.dateTimeRow}>
@@ -141,6 +159,19 @@ const styles = StyleSheet.create({
         paddingHorizontal: 14,
         paddingVertical: 4,
         marginBottom: 12,
+        borderWidth: 1,
+        borderColor: 'transparent',
+    },
+    inputRowError: {
+        borderColor: '#ff4444',
+        backgroundColor: 'rgba(255, 68, 68, 0.05)',
+    },
+    errorText: {
+        color: '#ff4444',
+        fontSize: 12,
+        marginTop: -8,
+        marginBottom: 12,
+        marginLeft: 4,
     },
     inputIcon: {
         fontSize: 18,

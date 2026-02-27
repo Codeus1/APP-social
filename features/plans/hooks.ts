@@ -24,8 +24,9 @@ export function useJoinPlan() {
     const utils = trpc.useUtils();
 
     return trpc.plans.join.useMutation({
-        onSuccess: async (updatedPlan) => {
-            utils.plans.byId.setData({ id: updatedPlan.id }, updatedPlan);
+        onSuccess: async (_, { id }) => {
+            // Invalidate to reflect "pending" status if we refetch
+            await utils.plans.byId.invalidate({ id });
             await utils.plans.list.invalidate();
         },
     });
@@ -36,7 +37,9 @@ export function useCreatePlan() {
 
     return trpc.plans.create.useMutation({
         onSuccess: async (newPlan) => {
-            utils.plans.byId.setData({ id: newPlan.id }, newPlan);
+            if (newPlan) {
+                utils.plans.byId.setData({ id: newPlan.id }, newPlan);
+            }
             await utils.plans.list.invalidate();
         },
     });
@@ -47,7 +50,9 @@ export function useUpdatePlan() {
 
     return trpc.plans.update.useMutation({
         onSuccess: async (updatedPlan) => {
-            utils.plans.byId.setData({ id: updatedPlan.id }, updatedPlan);
+            if (updatedPlan) {
+                utils.plans.byId.setData({ id: updatedPlan.id }, updatedPlan);
+            }
             await utils.plans.list.invalidate();
         },
     });
@@ -60,6 +65,24 @@ export function useDeletePlan() {
         onSuccess: async (_, { id }) => {
             utils.plans.byId.invalidate({ id });
             await utils.plans.list.invalidate();
+        },
+    });
+}
+
+export function useJoinRequestsQuery(planId: string) {
+    return trpc.plans.getJoinRequests.useQuery(
+        { planId },
+        { enabled: Boolean(planId) },
+    );
+}
+
+export function useRespondToJoinRequest() {
+    const utils = trpc.useUtils();
+
+    return trpc.plans.respondToJoinRequest.useMutation({
+        onSuccess: async (_, { planId }) => {
+            await utils.plans.getJoinRequests.invalidate({ planId });
+            await utils.plans.byId.invalidate({ id: planId });
         },
     });
 }

@@ -58,16 +58,11 @@ const styles = StyleSheet.create({
         borderColor: noctuaColors.primary,
         alignItems: 'center',
         justifyContent: 'center',
-        ...Platform.select({
-            web: { boxShadow: '0px 0px 8px rgba(244, 37, 140, 0.5)' },
-            default: {
-                shadowColor: noctuaColors.primary,
-                shadowOffset: { width: 0, height: 0 },
-                shadowOpacity: 0.5,
-                shadowRadius: 8,
-                elevation: 5,
-            },
-        }),
+        shadowColor: noctuaColors.primary,
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.5,
+        shadowRadius: 8,
+        elevation: 5,
     },
     markerActive: {
         backgroundColor: noctuaColors.primary,

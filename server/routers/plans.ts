@@ -3,9 +3,10 @@ import { TRPCError } from '@trpc/server';
 import { router, publicProcedure, protectedProcedure } from '../trpc';
 
 // Mapper to convert from database snake_case to frontend camelCase
-function mapDbPlanToFrontend(dbPlan: any) {
-    if (!dbPlan) return null;
-
+function mapDbPlanToFrontend(
+    dbPlan: any,
+    userJoinStatus: 'none' | 'pending' | 'joined' = 'none',
+) {
     // Determine attendees count from plan_attendees optionally joined, or the attendees_count column
     const attendeesCount = dbPlan.attendees_count ?? 1;
 
@@ -41,6 +42,7 @@ function mapDbPlanToFrontend(dbPlan: any) {
             'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800',
         isHappeningNow: dbPlan.is_happening_now ?? false,
         distance: '0 km', // Placeholder, needs geospatial query for real distance
+        userJoinStatus,
     };
 }
 
@@ -68,7 +70,7 @@ export const plansRouter = router({
             });
         }
 
-        return data.map(mapDbPlanToFrontend);
+        return data.map((p) => mapDbPlanToFrontend(p));
     }),
 
     byId: publicProcedure
@@ -97,7 +99,34 @@ export const plansRouter = router({
                 });
             }
 
-            return mapDbPlanToFrontend(data);
+            let userJoinStatus: 'none' | 'pending' | 'joined' = 'none';
+
+            if (ctx.user) {
+                // Check joined
+                const { data: attendee } = await ctx.supabase
+                    .from('plan_attendees')
+                    .select('user_id')
+                    .eq('plan_id', input.id)
+                    .eq('user_id', ctx.user.id)
+                    .single();
+
+                if (attendee) {
+                    userJoinStatus = 'joined';
+                } else {
+                    // Check pending
+                    const { data: req } = await ctx.supabase
+                        .from('join_requests')
+                        .select('status')
+                        .eq('plan_id', input.id)
+                        .eq('user_id', ctx.user.id)
+                        .eq('status', 'pending')
+                        .single();
+
+                    if (req) userJoinStatus = 'pending';
+                }
+            }
+
+            return mapDbPlanToFrontend(data, userJoinStatus);
         }),
 
     create: protectedProcedure
@@ -110,6 +139,9 @@ export const plansRouter = router({
                 tags: z.array(z.string()),
                 maxAttendees: z.number().int().positive(),
                 startsAt: z.string().datetime(),
+                imageUrl: z.string().nullable().optional(),
+                lat: z.number().optional(),
+                lng: z.number().optional(),
             }),
         )
         .mutation(async ({ ctx, input }) => {
@@ -126,6 +158,9 @@ export const plansRouter = router({
                 attendees_count: 1,
                 price: 'moderate',
                 age_range: '18-99',
+                image_url: input.imageUrl || undefined,
+                lat: input.lat || 0,
+                lng: input.lng || 0,
             };
 
             const { data, error } = await ctx.supabase
@@ -174,14 +209,18 @@ export const plansRouter = router({
             }
 
             const { error: joinError } = await ctx.supabase
-                .from('plan_attendees')
-                .insert({ plan_id: input.id, user_id: ctx.user.id });
+                .from('join_requests')
+                .insert({
+                    plan_id: input.id,
+                    user_id: ctx.user.id,
+                    status: 'pending',
+                });
 
             if (joinError) {
                 if (joinError.code === '23505') {
                     throw new TRPCError({
                         code: 'CONFLICT',
-                        message: 'Already joined',
+                        message: 'Already requested to join',
                     });
                 }
                 throw new TRPCError({
@@ -190,18 +229,110 @@ export const plansRouter = router({
                 });
             }
 
-            // Increment count in plans table
-            const { data: updatedPlan, error: updateError } = await ctx.supabase
-                .rpc('increment_attendees', { p_plan_id: input.id }) // We assuming you might have something like this
+            return { success: true };
+        }),
+
+    getJoinRequests: protectedProcedure
+        .input(z.object({ planId: z.string() }))
+        .query(async ({ ctx, input }) => {
+            // Check if host
+            const { data: plan } = await ctx.supabase
+                .from('plans')
+                .select('host_id')
+                .eq('id', input.planId)
                 .single();
 
-            // If they don't have RPC, we can just do a normal update for now.
-            // In a highly concurrent system, this can cause lost updates, but for MVP it's okay.
-            if (updateError) {
+            if (plan?.host_id !== ctx.user.id) {
+                throw new TRPCError({
+                    code: 'FORBIDDEN',
+                    message: 'Not the host',
+                });
+            }
+
+            const { data, error } = await ctx.supabase
+                .from('join_requests')
+                .select(
+                    `
+                    id, status, created_at,
+                    user:profiles!join_requests_user_id_fkey(id, name, avatar_url, host_level, rating)
+                `,
+                )
+                .eq('plan_id', input.planId)
+                .eq('status', 'pending');
+
+            if (error) {
+                throw new TRPCError({
+                    code: 'INTERNAL_SERVER_ERROR',
+                    message: error.message,
+                });
+            }
+
+            return data.map((d: any) => ({
+                id: d.id,
+                status: d.status,
+                created_at: d.created_at,
+                user: Array.isArray(d.user) ? d.user[0] : d.user,
+            }));
+        }),
+
+    respondToJoinRequest: protectedProcedure
+        .input(
+            z.object({
+                requestId: z.string(),
+                planId: z.string(),
+                userId: z.string(),
+                status: z.enum(['accepted', 'declined']),
+            }),
+        )
+        .mutation(async ({ ctx, input }) => {
+            // Verify host
+            const { data: plan } = await ctx.supabase
+                .from('plans')
+                .select('host_id, attendees_count, max_attendees')
+                .eq('id', input.planId)
+                .single();
+
+            if (plan?.host_id !== ctx.user.id) {
+                throw new TRPCError({
+                    code: 'FORBIDDEN',
+                    message: 'Not the host',
+                });
+            }
+
+            if (
+                input.status === 'accepted' &&
+                plan.attendees_count >= plan.max_attendees
+            ) {
+                throw new TRPCError({
+                    code: 'BAD_REQUEST',
+                    message: 'Plan is full',
+                });
+            }
+
+            // Update request status
+            const { error: updateReqError } = await ctx.supabase
+                .from('join_requests')
+                .update({ status: input.status })
+                .eq('id', input.requestId);
+
+            if (updateReqError) {
+                throw new TRPCError({
+                    code: 'INTERNAL_SERVER_ERROR',
+                    message: updateReqError.message,
+                });
+            }
+
+            if (input.status === 'accepted') {
+                // Add to plan attendees
+                await ctx.supabase
+                    .from('plan_attendees')
+                    .insert({ plan_id: input.planId, user_id: input.userId });
+
+                // Increment plan count
                 await ctx.supabase
                     .from('plans')
                     .update({ attendees_count: plan.attendees_count + 1 })
-                    .eq('id', input.id);
+                    .eq('id', input.planId);
             }
 
             return { success: true };
@@ -218,6 +349,9 @@ export const plansRouter = router({
                 tags: z.array(z.string()).optional(),
                 maxAttendees: z.number().int().positive().optional(),
                 startsAt: z.string().datetime().optional(),
+                imageUrl: z.string().nullable().optional(),
+                lat: z.number().optional(),
+                lng: z.number().optional(),
             }),
         )
         .mutation(async ({ ctx, input }) => {
@@ -249,6 +383,10 @@ export const plansRouter = router({
                 dbUpdates.max_attendees = updates.maxAttendees;
             if (updates.startsAt !== undefined)
                 dbUpdates.starts_at = updates.startsAt;
+            if (updates.imageUrl !== undefined)
+                dbUpdates.image_url = updates.imageUrl;
+            if (updates.lat !== undefined) dbUpdates.lat = updates.lat;
+            if (updates.lng !== undefined) dbUpdates.lng = updates.lng;
 
             const { data, error } = await ctx.supabase
                 .from('plans')
