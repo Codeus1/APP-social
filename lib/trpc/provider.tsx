@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import superjson from 'superjson';
 
 import { trpc } from './client';
+import { supabaseClient } from '../supabase/client';
 
 import Constants from 'expo-constants';
 
@@ -41,6 +42,13 @@ export function TRPCProvider({ queryClient, children }: TRPCProviderProps) {
                 httpBatchLink({
                     url: API_URL,
                     transformer: superjson,
+                    headers: async () => {
+                        const { data } = await supabaseClient.auth.getSession();
+                        const token = data?.session?.access_token;
+                        return token
+                            ? { Authorization: `Bearer ${token}` }
+                            : {};
+                    },
                 }),
             ],
         }),

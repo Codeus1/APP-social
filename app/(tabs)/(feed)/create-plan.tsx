@@ -7,7 +7,6 @@ import {
     ScrollView,
     StyleSheet,
     Text,
-    TextInput,
     View,
 } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
@@ -19,6 +18,13 @@ import {
 } from '@/features/plans/hooks';
 import { noctuaColors, noctuaRadii } from '@/lib/theme/tokens';
 import { ScreenContainer } from '@/components/ui/screen-container';
+import { ActivitySelector } from '@/components/plans/create/activity-selector';
+import { BasicDetailsForm } from '@/components/plans/create/basic-details-form';
+import { PillSelector } from '@/components/plans/create/pill-selector';
+import { MultiTagSelector } from '@/components/plans/create/multi-tag-selector';
+import { ParticipantsSlider } from '@/components/plans/create/participants-slider';
+import { SafetyToggle } from '@/components/plans/create/safety-toggle';
+import { CoverImagePicker } from '@/components/plans/create/cover-image-picker';
 
 // Activity type options
 const ACTIVITY_TYPES = [
@@ -84,6 +90,7 @@ export default function CreatePlanScreen() {
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
     const [ageRange, setAgeRange] = useState<string>('25-30');
     const [approvalRequired, setApprovalRequired] = useState(true);
+    const [imageUrl, setImageUrl] = useState<string | null>(null);
 
     // Populate state if editing
     useEffect(() => {
@@ -173,7 +180,13 @@ export default function CreatePlanScreen() {
                     [
                         {
                             text: 'View Plan',
-                            onPress: () => router.replace(`/plan/${result.id}`),
+                            onPress: () => {
+                                if (result && result.id) {
+                                    router.replace(`/plan/${result.id}`);
+                                } else {
+                                    router.replace('/');
+                                }
+                            },
                         },
                         {
                             text: 'Create Another',
@@ -240,393 +253,71 @@ export default function CreatePlanScreen() {
                         </Text>
                     </View>
 
-                    {/* Cover Image Section */}
-                    <Pressable style={styles.coverImageSection}>
-                        <View style={styles.coverImagePlaceholder}>
-                            <AntDesign
-                                name="plus"
-                                size={24}
-                                color={noctuaColors.primary}
-                            />
-                            <Text style={styles.coverImageText}>
-                                Add cover photo
-                            </Text>
-                        </View>
-                    </Pressable>
+                    {/* Modular Form Components */}
+                    <CoverImagePicker
+                        imageUrl={imageUrl}
+                        onChange={setImageUrl}
+                    />
 
-                    {/* Section 1: Activity Type */}
-                    <View style={styles.section}>
-                        <Text style={styles.sectionTitle}>
-                            What&apos;s the move?
-                        </Text>
-                        <ScrollView
-                            horizontal
-                            showsHorizontalScrollIndicator={false}
-                            contentContainerStyle={styles.activityScroll}
-                        >
-                            {ACTIVITY_TYPES.map((activity) => (
-                                <Pressable
-                                    key={activity.id}
-                                    onPress={() => setActivityType(activity.id)}
-                                    style={[
-                                        styles.activityItem,
-                                        activityType === activity.id &&
-                                            styles.activityItemActive,
-                                    ]}
-                                >
-                                    <View
-                                        style={[
-                                            styles.activityIconBox,
-                                            activityType === activity.id &&
-                                                styles.activityIconBoxActive,
-                                        ]}
-                                    >
-                                        <AntDesign
-                                            name={
-                                                activity.id === 'drinks'
-                                                    ? 'appstore'
-                                                    : activity.id === 'dance'
-                                                      ? 'play-circle'
-                                                      : activity.id === 'dinner'
-                                                        ? 'profile'
-                                                        : 'calendar'
-                                            }
-                                            size={16}
-                                            color={
-                                                activityType === activity.id
-                                                    ? noctuaColors.text
-                                                    : noctuaColors.textMuted
-                                            }
-                                        />
-                                    </View>
-                                    <Text
-                                        style={[
-                                            styles.activityLabel,
-                                            activityType === activity.id &&
-                                                styles.activityLabelActive,
-                                        ]}
-                                    >
-                                        {activity.label}
-                                    </Text>
-                                </Pressable>
-                            ))}
-                        </ScrollView>
-                    </View>
+                    <ActivitySelector
+                        options={ACTIVITY_TYPES}
+                        value={activityType}
+                        onChange={setActivityType}
+                    />
 
-                    {/* Section 2: The Basics */}
-                    <View style={styles.section}>
-                        <Text style={styles.sectionTitle}>The Basics</Text>
+                    <BasicDetailsForm
+                        title={title}
+                        description={description}
+                        location={location}
+                        date={date}
+                        time={time}
+                        onTitleChange={setTitle}
+                        onDescriptionChange={setDescription}
+                        onLocationChange={setLocation}
+                        onDateChange={setDate}
+                        onTimeChange={setTime}
+                    />
 
-                        {/* Title Input */}
-                        <View style={styles.inputRow}>
-                            <AntDesign
-                                name="edit"
-                                size={16}
-                                color={noctuaColors.textMuted}
-                                style={styles.inputIcon}
-                            />
-                            <TextInput
-                                value={title}
-                                onChangeText={setTitle}
-                                placeholder="Plan Title (e.g. Tapas & Sangria)"
-                                placeholderTextColor={noctuaColors.textMuted}
-                                style={styles.textInput}
-                            />
-                        </View>
+                    <PillSelector
+                        title="Energy Level"
+                        options={ENERGY_LEVELS}
+                        value={energy}
+                        onChange={setEnergy}
+                    />
 
-                        {/* Description Input */}
-                        <View style={[styles.inputRow, styles.descriptionRow]}>
-                            <AntDesign
-                                name="message"
-                                size={16}
-                                color={noctuaColors.textMuted}
-                                style={styles.inputIcon}
-                            />
-                            <TextInput
-                                value={description}
-                                onChangeText={setDescription}
-                                placeholder="What's the vibe? What should people expect?"
-                                placeholderTextColor={noctuaColors.textMuted}
-                                style={[
-                                    styles.textInput,
-                                    styles.descriptionInput,
-                                ]}
-                                multiline
-                                numberOfLines={3}
-                                textAlignVertical="top"
-                            />
-                        </View>
+                    <PillSelector
+                        title="Price Range"
+                        options={PRICE_RANGES}
+                        value={price}
+                        onChange={setPrice}
+                    />
 
-                        {/* Location Input */}
-                        <View style={styles.inputRow}>
-                            <AntDesign
-                                name="environment"
-                                size={16}
-                                color={noctuaColors.textMuted}
-                                style={styles.inputIcon}
-                            />
-                            <TextInput
-                                value={location}
-                                onChangeText={setLocation}
-                                placeholder="Where? (e.g. El Born, Barcelona)"
-                                placeholderTextColor={noctuaColors.textMuted}
-                                style={styles.textInput}
-                            />
-                        </View>
+                    <ParticipantsSlider
+                        value={maxAttendees}
+                        onChange={setMaxAttendees}
+                    />
 
-                        {/* Date & Time Row */}
-                        <View style={styles.dateTimeRow}>
-                            <View style={[styles.inputRow, styles.dateInput]}>
-                                <AntDesign
-                                    name="calendar"
-                                    size={16}
-                                    color={noctuaColors.textMuted}
-                                    style={styles.inputIcon}
-                                />
-                                <TextInput
-                                    value={date}
-                                    onChangeText={setDate}
-                                    placeholder="Date"
-                                    placeholderTextColor={
-                                        noctuaColors.textMuted
-                                    }
-                                    style={[
-                                        styles.textInput,
-                                        styles.dateTimeInput,
-                                    ]}
-                                />
-                            </View>
-                            <View style={[styles.inputRow, styles.timeInput]}>
-                                <AntDesign
-                                    name="clock-circle"
-                                    size={16}
-                                    color={noctuaColors.textMuted}
-                                    style={styles.inputIcon}
-                                />
-                                <TextInput
-                                    value={time}
-                                    onChangeText={setTime}
-                                    placeholder="Time"
-                                    placeholderTextColor={
-                                        noctuaColors.textMuted
-                                    }
-                                    style={[
-                                        styles.textInput,
-                                        styles.dateTimeInput,
-                                    ]}
-                                    keyboardType="numbers-and-punctuation"
-                                />
-                            </View>
-                        </View>
-                    </View>
+                    <MultiTagSelector
+                        title="Tags"
+                        options={TAG_OPTIONS}
+                        selectedTags={selectedTags}
+                        onChange={toggleTag}
+                    />
 
-                    {/* Section 3: Energy Level */}
-                    <View style={styles.section}>
-                        <Text style={styles.sectionTitle}>Energy Level</Text>
-                        <View style={styles.chipRow}>
-                            {ENERGY_LEVELS.map((level) => (
-                                <Pressable
-                                    key={level.id}
-                                    onPress={() => setEnergy(level.id)}
-                                    style={[
-                                        styles.chip,
-                                        energy === level.id &&
-                                            styles.chipActive,
-                                    ]}
-                                >
-                                    <Text
-                                        style={[
-                                            styles.chipText,
-                                            energy === level.id &&
-                                                styles.chipTextActive,
-                                        ]}
-                                    >
-                                        {level.emoji} {level.label}
-                                    </Text>
-                                </Pressable>
-                            ))}
-                        </View>
-                    </View>
+                    <PillSelector
+                        title="Age Range"
+                        options={AGE_RANGES.map((age) => ({
+                            id: age,
+                            label: age,
+                        }))}
+                        value={ageRange}
+                        onChange={setAgeRange}
+                    />
 
-                    {/* Section 4: Price Range */}
-                    <View style={styles.section}>
-                        <Text style={styles.sectionTitle}>Price Range</Text>
-                        <View style={styles.chipRow}>
-                            {PRICE_RANGES.map((range) => (
-                                <Pressable
-                                    key={range.id}
-                                    onPress={() => setPrice(range.id)}
-                                    style={[
-                                        styles.chip,
-                                        price === range.id && styles.chipActive,
-                                    ]}
-                                >
-                                    <Text
-                                        style={[
-                                            styles.chipText,
-                                            price === range.id &&
-                                                styles.chipTextActive,
-                                        ]}
-                                    >
-                                        {range.label}
-                                    </Text>
-                                </Pressable>
-                            ))}
-                        </View>
-                    </View>
-
-                    {/* Section 5: Max Attendees */}
-                    <View style={styles.section}>
-                        <View style={styles.sliderHeader}>
-                            <Text style={styles.sectionTitle}>
-                                Max Participants
-                            </Text>
-                            <View style={styles.sliderValueBadge}>
-                                <Text style={styles.sliderValueText}>
-                                    {maxAttendees} People
-                                </Text>
-                            </View>
-                        </View>
-                        <View style={styles.sliderContainer}>
-                            <View style={styles.sliderTrack}>
-                                <View
-                                    style={[
-                                        styles.sliderFill,
-                                        {
-                                            width: `${((maxAttendees - 2) / 48) * 100}%`,
-                                        },
-                                    ]}
-                                />
-                            </View>
-                            <View style={styles.sliderButtons}>
-                                <Pressable
-                                    onPress={() =>
-                                        setMaxAttendees((prev) =>
-                                            Math.max(2, prev - 1),
-                                        )
-                                    }
-                                    style={styles.sliderButton}
-                                >
-                                    <Text style={styles.sliderButtonText}>
-                                        −
-                                    </Text>
-                                </Pressable>
-                                <Text style={styles.sliderValue}>
-                                    {maxAttendees}
-                                </Text>
-                                <Pressable
-                                    onPress={() =>
-                                        setMaxAttendees((prev) =>
-                                            Math.min(50, prev + 1),
-                                        )
-                                    }
-                                    style={styles.sliderButton}
-                                >
-                                    <Text style={styles.sliderButtonText}>
-                                        +
-                                    </Text>
-                                </Pressable>
-                            </View>
-                        </View>
-                        <View style={styles.sliderLabels}>
-                            <Text style={styles.sliderLabel}>2</Text>
-                            <Text style={styles.sliderLabel}>50</Text>
-                        </View>
-                    </View>
-
-                    {/* Section 6: Tags */}
-                    <View style={styles.section}>
-                        <Text style={styles.sectionTitle}>Tags</Text>
-                        <View style={styles.tagsContainer}>
-                            {TAG_OPTIONS.map((tag) => (
-                                <Pressable
-                                    key={tag}
-                                    onPress={() => toggleTag(tag)}
-                                    style={[
-                                        styles.tagChip,
-                                        selectedTags.includes(tag) &&
-                                            styles.tagChipActive,
-                                    ]}
-                                >
-                                    <Text
-                                        style={[
-                                            styles.tagChipText,
-                                            selectedTags.includes(tag) &&
-                                                styles.tagChipTextActive,
-                                        ]}
-                                    >
-                                        {tag}
-                                    </Text>
-                                </Pressable>
-                            ))}
-                        </View>
-                    </View>
-
-                    {/* Section 7: Age Range */}
-                    <View style={styles.section}>
-                        <Text style={styles.sectionTitle}>Age Range</Text>
-                        <View style={styles.chipRow}>
-                            {AGE_RANGES.map((range) => (
-                                <Pressable
-                                    key={range}
-                                    onPress={() => setAgeRange(range)}
-                                    style={[
-                                        styles.chip,
-                                        ageRange === range && styles.chipActive,
-                                    ]}
-                                >
-                                    <Text
-                                        style={[
-                                            styles.chipText,
-                                            ageRange === range &&
-                                                styles.chipTextActive,
-                                        ]}
-                                    >
-                                        {range}
-                                    </Text>
-                                </Pressable>
-                            ))}
-                        </View>
-                    </View>
-
-                    {/* Section 8: Safety Toggle */}
-                    <View style={styles.section}>
-                        <View style={styles.toggleContainer}>
-                            <View style={styles.toggleIconBox}>
-                                <AntDesign
-                                    name="safety"
-                                    size={18}
-                                    color={noctuaColors.primary}
-                                />
-                            </View>
-                            <View style={styles.toggleTextContainer}>
-                                <Text style={styles.toggleTitle}>
-                                    Approval Required
-                                </Text>
-                                <Text style={styles.toggleSubtitle}>
-                                    Curate your crowd for safety
-                                </Text>
-                            </View>
-                            <Pressable
-                                onPress={() =>
-                                    setApprovalRequired((prev) => !prev)
-                                }
-                                style={[
-                                    styles.toggleSwitch,
-                                    approvalRequired &&
-                                        styles.toggleSwitchActive,
-                                ]}
-                            >
-                                <View
-                                    style={[
-                                        styles.toggleKnob,
-                                        approvalRequired &&
-                                            styles.toggleKnobActive,
-                                    ]}
-                                />
-                            </Pressable>
-                        </View>
-                    </View>
+                    <SafetyToggle
+                        value={approvalRequired}
+                        onChange={setApprovalRequired}
+                    />
 
                     {/* Submit Button */}
                     <Pressable
@@ -714,295 +405,6 @@ const styles = StyleSheet.create({
         color: noctuaColors.textMuted,
         fontSize: 14,
         marginTop: 4,
-    },
-    coverImageSection: {
-        marginBottom: 24,
-    },
-    coverImagePlaceholder: {
-        height: 160,
-        borderRadius: 20,
-        backgroundColor: noctuaColors.surface,
-        borderWidth: 1,
-        borderColor: noctuaColors.border,
-        borderStyle: 'dashed',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    coverImageIcon: {
-        color: noctuaColors.textMuted,
-        fontSize: 36,
-        fontWeight: '300',
-    },
-    coverImageText: {
-        color: noctuaColors.textMuted,
-        fontSize: 14,
-        marginTop: 8,
-    },
-    section: {
-        marginBottom: 24,
-    },
-    sectionTitle: {
-        color: noctuaColors.text,
-        fontSize: 16,
-        fontWeight: '700',
-        marginBottom: 12,
-    },
-    activityScroll: {
-        paddingVertical: 4,
-        gap: 12,
-    },
-    activityItem: {
-        alignItems: 'center',
-        minWidth: 72,
-    },
-    activityItemActive: {
-        // Active state styling handled by child elements
-    },
-    activityIconBox: {
-        width: 64,
-        height: 64,
-        borderRadius: 16,
-        backgroundColor: noctuaColors.surface,
-        borderWidth: 1,
-        borderColor: 'rgba(255, 255, 255, 0.05)',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginBottom: 6,
-    },
-    activityIconBoxActive: {
-        backgroundColor: noctuaColors.primary,
-        borderWidth: 0,
-        ...Platform.select({
-            web: { boxShadow: '0px 0px 12px rgba(244, 37, 140, 0.4)' },
-            default: {
-                shadowColor: noctuaColors.primary,
-                shadowOffset: { width: 0, height: 0 },
-                shadowOpacity: 0.4,
-                shadowRadius: 12,
-                elevation: 8,
-            },
-        }),
-    },
-    activityIcon: {
-        fontSize: 28,
-    },
-    activityLabel: {
-        color: noctuaColors.textMuted,
-        fontSize: 12,
-        fontWeight: '500',
-    },
-    activityLabelActive: {
-        color: noctuaColors.text,
-    },
-    inputRow: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: noctuaColors.surface,
-        borderRadius: 16,
-        paddingHorizontal: 14,
-        paddingVertical: 4,
-        marginBottom: 12,
-    },
-    inputIcon: {
-        fontSize: 18,
-        marginRight: 10,
-    },
-    textInput: {
-        flex: 1,
-        color: noctuaColors.text,
-        fontSize: 16,
-        paddingVertical: 14,
-    },
-    descriptionRow: {
-        alignItems: 'flex-start',
-    },
-    descriptionInput: {
-        minHeight: 80,
-        paddingTop: 14,
-    },
-    dateTimeRow: {
-        flexDirection: 'row',
-        gap: 12,
-    },
-    dateInput: {
-        flex: 2,
-    },
-    timeInput: {
-        flex: 1,
-    },
-    dateTimeInput: {
-        textAlign: 'center',
-    },
-    chipRow: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        gap: 8,
-    },
-    chip: {
-        paddingVertical: 10,
-        paddingHorizontal: 16,
-        borderRadius: noctuaRadii.chip,
-        backgroundColor: noctuaColors.surface,
-        borderWidth: 1,
-        borderColor: noctuaColors.border,
-    },
-    chipActive: {
-        backgroundColor: noctuaColors.primary,
-        borderColor: noctuaColors.primary,
-    },
-    chipText: {
-        color: noctuaColors.textMuted,
-        fontSize: 14,
-        fontWeight: '600',
-    },
-    chipTextActive: {
-        color: '#fff',
-    },
-    sliderHeader: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: 12,
-    },
-    sliderValueBadge: {
-        backgroundColor: noctuaColors.primary,
-        paddingVertical: 4,
-        paddingHorizontal: 12,
-        borderRadius: noctuaRadii.chip,
-    },
-    sliderValueText: {
-        color: '#fff',
-        fontSize: 12,
-        fontWeight: '700',
-    },
-    sliderContainer: {
-        backgroundColor: noctuaColors.surface,
-        borderRadius: 16,
-        padding: 16,
-        borderWidth: 1,
-        borderColor: 'rgba(255, 255, 255, 0.05)',
-    },
-    sliderTrack: {
-        height: 4,
-        backgroundColor: noctuaColors.background,
-        borderRadius: 2,
-        marginBottom: 16,
-    },
-    sliderFill: {
-        height: '100%',
-        backgroundColor: noctuaColors.primary,
-        borderRadius: 2,
-    },
-    sliderButtons: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-    },
-    sliderButton: {
-        width: 44,
-        height: 44,
-        borderRadius: 22,
-        backgroundColor: noctuaColors.background,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    sliderButtonText: {
-        color: noctuaColors.text,
-        fontSize: 24,
-        fontWeight: '300',
-    },
-    sliderValue: {
-        color: noctuaColors.text,
-        fontSize: 24,
-        fontWeight: '700',
-    },
-    sliderLabels: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginTop: 8,
-    },
-    sliderLabel: {
-        color: noctuaColors.textMuted,
-        fontSize: 12,
-        fontWeight: '500',
-    },
-    tagsContainer: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        gap: 8,
-    },
-    tagChip: {
-        paddingVertical: 8,
-        paddingHorizontal: 14,
-        borderRadius: noctuaRadii.chip,
-        backgroundColor: noctuaColors.surface,
-        borderWidth: 1,
-        borderColor: noctuaColors.border,
-    },
-    tagChipActive: {
-        backgroundColor: noctuaColors.primary,
-        borderColor: noctuaColors.primary,
-    },
-    tagChipText: {
-        color: noctuaColors.textMuted,
-        fontSize: 13,
-        fontWeight: '600',
-    },
-    tagChipTextActive: {
-        color: '#fff',
-    },
-    toggleContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: noctuaColors.surface,
-        borderRadius: 16,
-        padding: 16,
-        borderWidth: 1,
-        borderColor: 'rgba(255, 255, 255, 0.05)',
-    },
-    toggleIconBox: {
-        width: 40,
-        height: 40,
-        borderRadius: 20,
-        backgroundColor: 'rgba(244, 37, 140, 0.1)',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginRight: 12,
-    },
-    toggleIcon: {
-        fontSize: 20,
-    },
-    toggleTextContainer: {
-        flex: 1,
-    },
-    toggleTitle: {
-        color: noctuaColors.text,
-        fontSize: 14,
-        fontWeight: '600',
-    },
-    toggleSubtitle: {
-        color: noctuaColors.textMuted,
-        fontSize: 12,
-        marginTop: 2,
-    },
-    toggleSwitch: {
-        width: 44,
-        height: 24,
-        borderRadius: 12,
-        backgroundColor: 'rgba(255, 255, 255, 0.1)',
-        padding: 2,
-    },
-    toggleSwitchActive: {
-        backgroundColor: noctuaColors.primary,
-    },
-    toggleKnob: {
-        width: 20,
-        height: 20,
-        borderRadius: 10,
-        backgroundColor: '#fff',
-    },
-    toggleKnobActive: {
-        alignSelf: 'flex-end',
     },
     submitButton: {
         backgroundColor: noctuaColors.primary,

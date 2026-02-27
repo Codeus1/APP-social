@@ -2,7 +2,7 @@
 trigger: always_on
 ---
 
-# Cursor Rules for Expo and React Native Projects
+# Rules for Expo and React Native
 
 This document outlines the standardized rules and guidelines for developing mobile applications using Expo and React Native. These rules are designed to ensure consistency, maintainability, performance, accessibility, and error-free development across all projects. They apply to all Expo-based React Native apps and are crafted to minimize troubleshooting efforts and enforce best practices.
 
@@ -221,12 +221,10 @@ This document outlines the standardized rules and guidelines for developing mobi
 - Maintain a `README.md` with setup instructions, project overview, and key scripts.
 - Document custom components, hooks, and utilities with JSDoc or TypeScript comments.
 - Reference Expo's official documentation for setup and best practices: https://docs.expo.dev/
-- Include a `CHANGELOG.md` to track updates and breaking changes.
 
 ## Recommended Tools
 
 - **Editor**: VS Code with ESLint, Prettier, and TypeScript extensions.
 - **Linting**: ESLint with React Native and TypeScript plugins.
 - **Formatting**: Prettier with default settings.
-- **Debugging**: React Native Debugger, Expo DevTools, or Flipper.
 - **CI/CD**: Use GitHub Actions or similar for automated testing and deployment.
