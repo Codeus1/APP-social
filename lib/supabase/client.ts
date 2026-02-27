@@ -1,26 +1,19 @@
 import { createClient } from '@supabase/supabase-js';
-import * as SecureStore from 'expo-secure-store';
+import { storageAdapter } from './storage-adapter';
 
 const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL ?? '';
-const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY ?? '';
-
-const secureStorage = {
-  async getItem(key: string) {
-    return SecureStore.getItemAsync(key);
-  },
-  async setItem(key: string, value: string) {
-    await SecureStore.setItemAsync(key, value);
-  },
-  async removeItem(key: string) {
-    await SecureStore.deleteItemAsync(key);
-  },
-};
+const supabaseAnonKey =
+    process.env.EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY ??
+    process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY ??
+    process.env.SUPABASE_PUBLISHABLE_KEY ??
+    process.env.SUPABASE_PUBLIC_API_KEY ??
+    '';
 
 export const supabaseClient = createClient(supabaseUrl, supabaseAnonKey, {
-  auth: {
-    persistSession: true,
-    autoRefreshToken: true,
-    detectSessionInUrl: false,
-    storage: secureStorage,
-  },
+    auth: {
+        storage: storageAdapter,
+        autoRefreshToken: true,
+        persistSession: true,
+        detectSessionInUrl: false,
+    },
 });
