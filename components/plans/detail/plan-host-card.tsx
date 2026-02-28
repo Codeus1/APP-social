@@ -9,10 +9,15 @@ interface PlanHostCardProps {
         avatarUrl: string | null;
         rating?: number;
     };
+    isHost?: boolean;
     onMessageHost: () => void;
 }
 
-export function PlanHostCard({ host, onMessageHost }: PlanHostCardProps) {
+export function PlanHostCard({
+    host,
+    isHost,
+    onMessageHost,
+}: PlanHostCardProps) {
     return (
         <View style={styles.hostCard}>
             <View style={styles.hostLeft}>
@@ -28,7 +33,9 @@ export function PlanHostCard({ host, onMessageHost }: PlanHostCardProps) {
                     </View>
                 </View>
                 <View>
-                    <Text style={styles.hostName}>{host.name}</Text>
+                    <Text style={styles.hostName}>
+                        {isHost ? `Tú (${host.name})` : host.name}
+                    </Text>
                     <Text style={styles.hostTrust}>
                         {host.rating
                             ? `Rating: ⭐ ${host.rating.toFixed(1)}/5.0`
@@ -36,13 +43,19 @@ export function PlanHostCard({ host, onMessageHost }: PlanHostCardProps) {
                     </Text>
                 </View>
             </View>
-            <Pressable
-                style={styles.chatButton}
-                onPress={onMessageHost}
-                hitSlop={8}
-            >
-                <AntDesign name="message" size={18} color={noctuaColors.text} />
-            </Pressable>
+            {!isHost && (
+                <Pressable
+                    style={styles.chatButton}
+                    onPress={onMessageHost}
+                    hitSlop={8}
+                >
+                    <AntDesign
+                        name="message"
+                        size={18}
+                        color={noctuaColors.text}
+                    />
+                </Pressable>
+            )}
         </View>
     );
 }

@@ -14,6 +14,7 @@ import {
     useJoinRequestsQuery,
     useRespondToJoinRequest,
 } from '@/features/plans/hooks';
+import { trpc } from '@/lib/trpc/client';
 import { noctuaColors, noctuaRadii } from '@/lib/theme/tokens';
 import { useAuth } from '@/lib/auth/auth-context';
 
@@ -37,6 +38,25 @@ export default function PlanDetailScreen() {
 
     // Only fetch join requests if we are the host
     const { data: joinRequests } = useJoinRequestsQuery(isHost ? id : '');
+
+    const utils = trpc.useUtils();
+    const joinMutation = trpc.plans.join.useMutation({
+        onSuccess: () => {
+            utils.plans.byId.invalidate({ id }); // Use 'id' from useLocalSearchParams
+            utils.plans.list.invalidate();
+        },
+    });
+
+    const getOrCreateChatMutation =
+        trpc.chats.getOrCreateDirectChat.useMutation({
+            onSuccess: (data) => {
+                router.push(`/(tabs)/(chats)/${data.chatId}` as any);
+            },
+            onError: (err) => {
+                console.error('Failed to create chat:', err);
+                // In a better UX, show toast
+            },
+        });
 
     if (!plan) {
         return (
@@ -85,7 +105,7 @@ export default function PlanDetailScreen() {
     /** Open a DM conversation with the plan host */
     const handleMessageHost = () => {
         if (!plan.host?.id) return;
-        router.push(`/(tabs)/(chats)/${plan.host.id}` as RelativePathString);
+        getOrCreateChatMutation.mutate({ targetUserId: plan.host.id });
     };
 
     const handleRespondRequest = (
@@ -157,6 +177,7 @@ export default function PlanDetailScreen() {
                     {/* Host card — message button opens DM */}
                     <PlanHostCard
                         host={plan.host}
+                        isHost={isHost}
                         onMessageHost={handleMessageHost}
                     />
 

@@ -13,11 +13,17 @@ export async function createContext(opts: FetchCreateContextFnOptions) {
         process.env.SUPABASE_PUBLIC_API_KEY ??
         '';
 
+    const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY ?? '';
+
     const supabase = createClient(supabaseUrl, supabaseAnonKey, {
         auth: { persistSession: false },
         global: {
             headers: authHeader ? { Authorization: authHeader } : {},
         },
+    });
+
+    const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
+        auth: { persistSession: false },
     });
 
     let user = null;
@@ -53,6 +59,7 @@ export async function createContext(opts: FetchCreateContextFnOptions) {
         req,
         resHeaders,
         supabase,
+        supabaseAdmin,
         user,
     };
 }
