@@ -18,27 +18,34 @@ import { usePlansQuery } from '@/features/plans/hooks';
 import type { Plan } from '@/features/plans/types';
 import { noctuaColors, noctuaRadii } from '@/lib/theme/tokens';
 import { FeaturedPlanCard } from '@/components/plans/featured-plan-card';
-import { MediumPlanCard } from '@/components/plans/medium-plan-card';
-import { CompactPlanCard } from '@/components/plans/compact-plan-card';
 
-const filterChips = [
+// ─── Constants ────────────────────────────────────────────────────────────────
+
+const FILTER_CHIPS = [
     { label: 'For You', value: 'all' },
     { label: 'Tonight', value: 'tonight' },
-    { label: 'Near Me', value: 'near' },
     { label: 'High Energy', value: 'high' },
     { label: 'Chill', value: 'low' },
 ] as const;
 
-type FilterValue = (typeof filterChips)[number]['value'];
+type FilterValue = (typeof FILTER_CHIPS)[number]['value'];
+
+// ─── Subcomponents ────────────────────────────────────────────────────────────
+
+function Separator() {
+    return <View style={styles.separator} />;
+}
+
+// ─── Main Screen ──────────────────────────────────────────────────────────────
 
 export default function FeedScreen() {
     const { data: plans = [], isLoading } = usePlansQuery();
     const [activeFilter, setActiveFilter] = useState<FilterValue>('all');
     const [search, setSearch] = useState('');
 
-    const filteredPlans = useMemo(() => {
+    const filteredPlans = useMemo<Plan[]>(() => {
+        const query = search.trim().toLowerCase();
         return plans.filter((plan: Plan) => {
-            const query = search.trim().toLowerCase();
             const matchesQuery =
                 query.length === 0 ||
                 plan.title.toLowerCase().includes(query) ||
@@ -46,14 +53,8 @@ export default function FeedScreen() {
                 plan.tags.some((tag: string) =>
                     tag.toLowerCase().includes(query),
                 );
-
             if (!matchesQuery) return false;
-
             switch (activeFilter) {
-                case 'tonight':
-                    return true; // All plans are tonight in this context
-                case 'near':
-                    return true; // Would filter by distance
                 case 'high':
                     return plan.energy === 'high';
                 case 'low':
@@ -69,138 +70,29 @@ export default function FeedScreen() {
     }, []);
 
     const renderItem = useCallback(
-        ({ item, index }: { item: Plan; index: number }) => {
-            let card: React.ReactNode;
-
-            if (index === 0) {
-                card = (
-                    <FeaturedPlanCard
-                        plan={item}
-                        onPress={() => navigateToPlan(item.id)}
-                    />
-                );
-            } else if (index === 1) {
-                card = (
-                    <MediumPlanCard
-                        plan={item}
-                        onPress={() => navigateToPlan(item.id)}
-                    />
-                );
-            } else {
-                card = (
-                    <CompactPlanCard
-                        plan={item}
-                        onPress={() => navigateToPlan(item.id)}
-                    />
-                );
-            }
-
-            return (
-                <Animated.View
-                    entering={FadeInDown.delay(index * 80).duration(320)}
-                >
-                    {card}
-                </Animated.View>
-            );
-        },
+        ({ item, index }: { item: Plan; index: number }) => (
+            <Animated.View
+                entering={FadeInDown.delay(index * 70).duration(300)}
+            >
+                <FeaturedPlanCard
+                    plan={item}
+                    onPress={() => navigateToPlan(item.id)}
+                />
+            </Animated.View>
+        ),
         [navigateToPlan],
     );
 
     const keyExtractor = useCallback((item: Plan) => item.id, []);
 
-    const ListHeader = useMemo(
-        () => (
-            <View style={styles.headerContainer}>
-                {/* Location + Avatar row */}
-                <View style={styles.locationRow}>
-                    <View>
-                        <Text style={styles.locationLabel}>
-                            CURRENT LOCATION
-                        </Text>
-                        <View style={styles.cityRow}>
-                            <Text style={styles.locationCity}>
-                                {'Paris, France'}
-                            </Text>
-                            <Text style={styles.dropdownArrow}>▾</Text>
-                        </View>
-                    </View>
-                    <View style={styles.userAvatar}>
-                        <View style={styles.userAvatarInner} />
-                        <View style={styles.onlineDot} />
-                    </View>
-                </View>
-
-                {/* Search bar */}
-                <View style={styles.searchWrapper}>
-                    <AntDesign
-                        name="search"
-                        size={16}
-                        color={noctuaColors.textMuted}
-                        style={styles.searchIcon}
-                    />
-                    <TextInput
-                        value={search}
-                        onChangeText={setSearch}
-                        placeholder="Find techno, rooftop bars, chill..."
-                        placeholderTextColor={noctuaColors.textMuted}
-                        style={styles.searchInput}
-                    />
-                    <Pressable style={styles.filterIcon}>
-                        <AntDesign
-                            name="filter"
-                            size={18}
-                            color={noctuaColors.textMuted}
-                            style={styles.filterIconText}
-                        />
-                    </Pressable>
-                </View>
-
-                {/* Filter chips */}
-                <ScrollView
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    contentContainerStyle={styles.filtersContent}
-                    style={styles.filtersScroll}
-                >
-                    {filterChips.map((chip) => {
-                        const isActive = activeFilter === chip.value;
-                        return (
-                            <Pressable
-                                key={chip.value}
-                                onPress={() => setActiveFilter(chip.value)}
-                                style={[
-                                    styles.filterChip,
-                                    isActive
-                                        ? styles.filterChipActive
-                                        : styles.filterChipInactive,
-                                ]}
-                            >
-                                <Text
-                                    style={[
-                                        styles.filterChipText,
-                                        isActive
-                                            ? styles.filterChipTextActive
-                                            : styles.filterChipTextInactive,
-                                    ]}
-                                >
-                                    {chip.label}
-                                </Text>
-                            </Pressable>
-                        );
-                    })}
-                </ScrollView>
-            </View>
-        ),
-        [activeFilter, search],
-    );
-
     const ListEmpty = useCallback(
-        () =>
-            isLoading ? (
-                <Text style={styles.emptyText}>Loading plans...</Text>
-            ) : (
-                <Text style={styles.emptyText}>No plans found.</Text>
-            ),
+        () => (
+            <Text style={styles.emptyText}>
+                {isLoading
+                    ? 'Cargando planes...'
+                    : 'No hay planes disponibles.'}
+            </Text>
+        ),
         [isLoading],
     );
 
@@ -210,11 +102,22 @@ export default function FeedScreen() {
                 data={filteredPlans}
                 renderItem={renderItem}
                 keyExtractor={keyExtractor}
-                ListHeaderComponent={ListHeader}
+                ListHeaderComponent={
+                    <FeedHeader
+                        search={search}
+                        activeFilter={activeFilter}
+                        onSearch={setSearch}
+                        onFilter={setActiveFilter}
+                    />
+                }
                 ListEmptyComponent={ListEmpty}
                 contentContainerStyle={styles.listContent}
                 ItemSeparatorComponent={Separator}
                 keyboardShouldPersistTaps="handled"
+                removeClippedSubviews
+                windowSize={7}
+                maxToRenderPerBatch={5}
+                initialNumToRender={4}
             />
 
             {/* FAB */}
@@ -228,9 +131,86 @@ export default function FeedScreen() {
     );
 }
 
-function Separator() {
-    return <View style={styles.separator} />;
+// ─── Feed Header ──────────────────────────────────────────────────────────────
+
+interface FeedHeaderProps {
+    search: string;
+    activeFilter: FilterValue;
+    onSearch: (v: string) => void;
+    onFilter: (v: FilterValue) => void;
 }
+
+function FeedHeader({
+    search,
+    activeFilter,
+    onSearch,
+    onFilter,
+}: FeedHeaderProps) {
+    return (
+        <View style={styles.headerContainer}>
+            {/* Title */}
+            <View style={styles.locationRow}>
+                <View>
+                    <Text style={styles.locationLabel}>PLANES CERCA</Text>
+                    <Text style={styles.locationCity}>Descubre 🌙</Text>
+                </View>
+            </View>
+
+            {/* Search bar */}
+            <View style={styles.searchWrapper}>
+                <AntDesign
+                    name="search"
+                    size={16}
+                    color={noctuaColors.textMuted}
+                />
+                <TextInput
+                    value={search}
+                    onChangeText={onSearch}
+                    placeholder="Busca techno, rooftop, chill..."
+                    placeholderTextColor={noctuaColors.textMuted}
+                    style={styles.searchInput}
+                />
+            </View>
+
+            {/* Filter chips */}
+            <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.filtersContent}
+                style={styles.filtersScroll}
+            >
+                {FILTER_CHIPS.map((chip) => {
+                    const isActive = activeFilter === chip.value;
+                    return (
+                        <Pressable
+                            key={chip.value}
+                            onPress={() => onFilter(chip.value)}
+                            style={[
+                                styles.filterChip,
+                                isActive
+                                    ? styles.filterChipActive
+                                    : styles.filterChipInactive,
+                            ]}
+                        >
+                            <Text
+                                style={[
+                                    styles.filterChipText,
+                                    isActive
+                                        ? styles.filterChipTextActive
+                                        : styles.filterChipTextInactive,
+                                ]}
+                            >
+                                {chip.label}
+                            </Text>
+                        </Pressable>
+                    );
+                })}
+            </ScrollView>
+        </View>
+    );
+}
+
+// ─── Styles ───────────────────────────────────────────────────────────────────
 
 const styles = StyleSheet.create({
     safeArea: {
@@ -238,7 +218,6 @@ const styles = StyleSheet.create({
         backgroundColor: noctuaColors.background,
     },
     listContent: {
-        flexGrow: 1,
         padding: 16,
         paddingBottom: 100,
     },
@@ -246,8 +225,6 @@ const styles = StyleSheet.create({
         gap: 16,
         marginBottom: 20,
     },
-
-    /* Location header */
     locationRow: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -259,48 +236,12 @@ const styles = StyleSheet.create({
         fontWeight: '700',
         letterSpacing: 1.2,
     },
-    cityRow: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 6,
-        marginTop: 2,
-    },
     locationCity: {
         color: noctuaColors.text,
         fontSize: 26,
         fontWeight: '800',
-    },
-    dropdownArrow: {
-        color: noctuaColors.text,
-        fontSize: 18,
         marginTop: 2,
     },
-    userAvatar: {
-        width: 44,
-        height: 44,
-        borderRadius: 22,
-        borderWidth: 2,
-        borderColor: noctuaColors.primary,
-        overflow: 'hidden',
-        position: 'relative',
-    },
-    userAvatarInner: {
-        flex: 1,
-        backgroundColor: noctuaColors.surfaceSoft,
-    },
-    onlineDot: {
-        position: 'absolute',
-        bottom: 1,
-        right: 1,
-        width: 10,
-        height: 10,
-        borderRadius: 5,
-        backgroundColor: noctuaColors.success,
-        borderWidth: 2,
-        borderColor: noctuaColors.background,
-    },
-
-    /* Search */
     searchWrapper: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -309,10 +250,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: noctuaColors.border,
         paddingHorizontal: 14,
-        gap: 8,
-    },
-    searchIcon: {
-        fontSize: 16,
+        gap: 10,
     },
     searchInput: {
         flex: 1,
@@ -321,15 +259,6 @@ const styles = StyleSheet.create({
         paddingVertical: 12,
         fontSize: 14,
     },
-    filterIcon: {
-        padding: 4,
-    },
-    filterIconText: {
-        color: noctuaColors.textMuted,
-        fontSize: 18,
-    },
-
-    /* Filters */
     filtersScroll: {
         marginHorizontal: -16,
     },
@@ -360,21 +289,15 @@ const styles = StyleSheet.create({
     filterChipTextInactive: {
         color: noctuaColors.text,
     },
-
-    /* Empty */
     emptyText: {
         color: noctuaColors.textMuted,
         fontSize: 14,
         textAlign: 'center',
         marginTop: 40,
     },
-
-    /* Separator */
     separator: {
         height: 14,
     },
-
-    /* FAB */
     fab: {
         position: 'absolute',
         bottom: 24,

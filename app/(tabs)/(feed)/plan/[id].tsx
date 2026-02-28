@@ -137,11 +137,7 @@ export default function PlanDetailScreen() {
                         <Text style={styles.metaText}>{plan.location}</Text>
                     </View>
 
-                    {/* Host card */}
-                    <PlanHostCard
-                        host={plan.host}
-                        matchPercentage={plan.matchPercentage}
-                    />
+                    <PlanHostCard host={plan.host} />
 
                     {/* The Plan section */}
                     <Text style={styles.sectionTitle}>The Plan</Text>
@@ -169,10 +165,7 @@ export default function PlanDetailScreen() {
                     )}
 
                     {/* Location section */}
-                    <PlanLocationCard
-                        location={plan.location}
-                        distance={plan.distance}
-                    />
+                    <PlanLocationCard location={plan.location} />
                 </View>
             </ScrollView>
 

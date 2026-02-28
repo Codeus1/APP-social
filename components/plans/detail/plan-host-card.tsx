@@ -6,19 +6,20 @@ interface PlanHostCardProps {
     host: {
         id: string;
         name: string;
-        avatarUrl: string;
+        avatarUrl: string | null;
         rating?: number;
     };
-    matchPercentage: number;
 }
 
-export function PlanHostCard({ host, matchPercentage }: PlanHostCardProps) {
+export function PlanHostCard({ host }: PlanHostCardProps) {
     return (
         <View style={styles.hostCard}>
             <View style={styles.hostLeft}>
                 <View style={styles.hostAvatarWrapper}>
                     <Image
-                        source={{ uri: host.avatarUrl }}
+                        source={{
+                            uri: host.avatarUrl || 'https://i.pravatar.cc/150',
+                        }}
                         style={styles.hostAvatar}
                     />
                     <View style={styles.hostBadge}>
@@ -26,12 +27,11 @@ export function PlanHostCard({ host, matchPercentage }: PlanHostCardProps) {
                     </View>
                 </View>
                 <View>
-                    <Text style={styles.hostName}>
-                        {host.name}
-                        <Text style={styles.hostAge}> (24)</Text>
-                    </Text>
+                    <Text style={styles.hostName}>{host.name}</Text>
                     <Text style={styles.hostTrust}>
-                        {`Trust score: ${matchPercentage}%`}
+                        {host.rating
+                            ? `Rating: ⭐ ${host.rating.toFixed(1)}/5.0`
+                            : 'Newcomer Host'}
                     </Text>
                 </View>
             </View>

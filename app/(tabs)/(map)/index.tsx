@@ -260,7 +260,7 @@ export default function MapScreen() {
                                         {plan.location}
                                     </Text>
                                     <Text style={styles.planCardDistance}>
-                                        {plan.distance}
+                                        {plan.energy} energy
                                     </Text>
                                 </Pressable>
                             ))
@@ -361,7 +361,8 @@ export default function MapScreen() {
                                     {selectedPlan.maxAttendees}
                                 </Text>
                                 <Text style={styles.selectedPlanMatch}>
-                                    {selectedPlan.matchPercentage}% match
+                                    {selectedPlan.attendees} /{' '}
+                                    {selectedPlan.maxAttendees} attending
                                 </Text>
                             </View>
                             <View style={styles.viewButton}>
@@ -390,7 +391,7 @@ export default function MapScreen() {
                                     {plan.location}
                                 </Text>
                                 <Text style={styles.planCardDistance}>
-                                    {plan.distance}
+                                    {plan.energy} energy
                                 </Text>
                             </Pressable>
                         ))

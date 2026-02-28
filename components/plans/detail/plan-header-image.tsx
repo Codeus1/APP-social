@@ -3,7 +3,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { AntDesign } from '@expo/vector-icons';
 
 interface PlanHeaderImageProps {
-    imageUrl: string;
+    imageUrl: string | null;
     isHost: boolean;
     isDeleting?: boolean;
     onBack: () => void;
@@ -19,9 +19,14 @@ export function PlanHeaderImage({
     onEdit,
     onDelete,
 }: PlanHeaderImageProps) {
+    const defaultHero =
+        'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800';
     return (
         <View style={styles.heroWrapper}>
-            <Image source={{ uri: imageUrl }} style={styles.heroImage} />
+            <Image
+                source={{ uri: imageUrl || defaultHero }}
+                style={styles.heroImage}
+            />
             <SafeAreaView style={styles.topBar} edges={['top']}>
                 <Pressable style={styles.topButton} onPress={onBack}>
                     <AntDesign name="arrow-left" size={20} color="#fff" />

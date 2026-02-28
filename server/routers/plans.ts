@@ -20,28 +20,24 @@ function mapDbPlanToFrontend(
             lng: dbPlan.lng ?? 0,
         },
         host: dbPlan.host ?? {
+            id: dbPlan.host_id,
             name: dbPlan.profiles?.name ?? 'Unknown Host',
-            avatarUrl:
-                dbPlan.profiles?.avatar_url ?? 'https://i.pravatar.cc/150',
+            avatarUrl: dbPlan.profiles?.avatar_url ?? null,
             verified: dbPlan.profiles?.is_verified ?? false,
+            hostLevel: dbPlan.profiles?.host_level ?? 'Newcomer',
+            rating: dbPlan.profiles?.rating ?? 0.0,
         },
         startsAt: dbPlan.starts_at,
         energy: dbPlan.energy,
+        activityType: dbPlan.activity_type ?? 'drinks',
         tags: dbPlan.tags ?? [],
         attendees: attendeesCount,
         maxAttendees: dbPlan.max_attendees,
-        matchPercentage: 100, // Placeholder
-        genderRatio: {
-            male: dbPlan.gender_ratio_male ?? 50,
-            female: dbPlan.gender_ratio_female ?? 50,
-        },
         price: dbPlan.price,
         ageRange: dbPlan.age_range,
-        imageUrl:
-            dbPlan.image_url ??
-            'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800',
+        approvalRequired: dbPlan.approval_required ?? true,
+        imageUrl: dbPlan.image_url ?? null,
         isHappeningNow: dbPlan.is_happening_now ?? false,
-        distance: '0 km', // Placeholder, needs geospatial query for real distance
         userJoinStatus,
     };
 }
@@ -136,7 +132,11 @@ export const plansRouter = router({
                 location: z.string().min(1),
                 description: z.string(),
                 energy: z.enum(['low', 'medium', 'high']),
+                activityType: z.string(),
+                price: z.enum(['cheap', 'moderate', 'expensive']),
+                ageRange: z.string(),
                 tags: z.array(z.string()),
+                approvalRequired: z.boolean(),
                 maxAttendees: z.number().int().positive(),
                 startsAt: z.string().datetime(),
                 imageUrl: z.string().nullable().optional(),
@@ -150,14 +150,16 @@ export const plansRouter = router({
                 location: input.location,
                 description: input.description,
                 energy: input.energy,
+                activity_type: input.activityType,
+                price: input.price,
+                age_range: input.ageRange,
                 tags: input.tags,
+                approval_required: input.approvalRequired,
                 max_attendees: input.maxAttendees,
                 starts_at: input.startsAt,
                 host_id: ctx.user.id,
                 // Additional defaults
                 attendees_count: 1,
-                price: 'moderate',
-                age_range: '18-99',
                 image_url: input.imageUrl || undefined,
                 lat: input.lat || 0,
                 lng: input.lng || 0,
@@ -335,6 +337,35 @@ export const plansRouter = router({
                     .eq('id', input.planId);
             }
 
+            // ── Fetch plan title + host profile name for the notification body ──
+            const { data: planMeta } = await ctx.supabase
+                .from('plans')
+                .select('title, profiles!plans_host_id_fkey(name)')
+                .eq('id', input.planId)
+                .single();
+
+            const planTitle = (planMeta as any)?.title ?? 'the plan';
+            const hostName = (planMeta as any)?.profiles?.name ?? 'The host';
+
+            // ── Insert in-app notification for the requester ──
+            await ctx.supabase.from('notifications').insert({
+                user_id: input.userId,
+                type:
+                    input.status === 'accepted'
+                        ? 'join_accepted'
+                        : 'join_declined',
+                title:
+                    input.status === 'accepted'
+                        ? "🎉 You're in!"
+                        : 'Request not accepted',
+                body:
+                    input.status === 'accepted'
+                        ? `${hostName} accepted your request to join "${planTitle}". See you there!`
+                        : `${hostName} couldn't fit you into "${planTitle}" this time. Keep exploring!`,
+                plan_id: input.planId,
+                sender_id: ctx.user.id,
+            });
+
             return { success: true };
         }),
 
@@ -346,6 +377,10 @@ export const plansRouter = router({
                 location: z.string().min(1).optional(),
                 description: z.string().optional(),
                 energy: z.enum(['low', 'medium', 'high']).optional(),
+                activityType: z.string().optional(),
+                price: z.enum(['cheap', 'moderate', 'expensive']).optional(),
+                ageRange: z.string().optional(),
+                approvalRequired: z.boolean().optional(),
                 tags: z.array(z.string()).optional(),
                 maxAttendees: z.number().int().positive().optional(),
                 startsAt: z.string().datetime().optional(),
@@ -378,6 +413,13 @@ export const plansRouter = router({
             if (updates.description !== undefined)
                 dbUpdates.description = updates.description;
             if (updates.energy !== undefined) dbUpdates.energy = updates.energy;
+            if (updates.activityType !== undefined)
+                dbUpdates.activity_type = updates.activityType;
+            if (updates.price !== undefined) dbUpdates.price = updates.price;
+            if (updates.ageRange !== undefined)
+                dbUpdates.age_range = updates.ageRange;
+            if (updates.approvalRequired !== undefined)
+                dbUpdates.approval_required = updates.approvalRequired;
             if (updates.tags !== undefined) dbUpdates.tags = updates.tags;
             if (updates.maxAttendees !== undefined)
                 dbUpdates.max_attendees = updates.maxAttendees;

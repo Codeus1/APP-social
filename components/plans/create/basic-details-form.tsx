@@ -1,145 +1,172 @@
 import { StyleSheet, Text, TextInput, View } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
+import { useController, type Control } from 'react-hook-form';
 import { noctuaColors } from '@/lib/theme/tokens';
+import type { PlanFormData } from '@/features/plans/schemas/plan-schema';
+
+// ─── Types ────────────────────────────────────────────────────────────────────
 
 interface BasicDetailsFormProps {
-    title: string;
-    description: string;
-    location: string;
-    date: string;
-    time: string;
-    onTitleChange: (text: string) => void;
-    onDescriptionChange: (text: string) => void;
-    onLocationChange: (text: string) => void;
-    onDateChange: (text: string) => void;
-    onTimeChange: (text: string) => void;
-    titleError?: string;
-    locationError?: string;
+    control: Control<PlanFormData>;
 }
 
-export function BasicDetailsForm({
-    title,
-    description,
-    location,
-    date,
-    time,
-    onTitleChange,
-    onDescriptionChange,
-    onLocationChange,
-    onDateChange,
-    onTimeChange,
-    titleError,
-    locationError,
-}: BasicDetailsFormProps) {
-    return (
-        <View style={styles.section}>
-            <Text style={styles.sectionTitle}>The Basics</Text>
+// ─── Individual field components using useController ─────────────────────────
+// Each subscribes only to its own field value, preventing full re-renders
 
-            {/* Title Input */}
+function TitleField({ control }: BasicDetailsFormProps) {
+    const { field, fieldState } = useController({ control, name: 'title' });
+
+    return (
+        <>
             <View
                 style={[
                     styles.inputRow,
-                    titleError ? styles.inputRowError : null,
+                    fieldState.error ? styles.inputRowError : null,
                 ]}
             >
                 <AntDesign
                     name="edit"
                     size={16}
-                    color={titleError ? '#ff4444' : noctuaColors.textMuted}
+                    color={
+                        fieldState.error ? '#ff4444' : noctuaColors.textMuted
+                    }
                     style={styles.inputIcon}
                 />
                 <TextInput
-                    value={title}
-                    onChangeText={onTitleChange}
+                    value={field.value}
+                    onChangeText={field.onChange}
+                    onBlur={field.onBlur}
                     placeholder="Plan Title (e.g. Tapas & Sangria)"
                     placeholderTextColor={noctuaColors.textMuted}
                     style={styles.textInput}
                 />
             </View>
-            {titleError && <Text style={styles.errorText}>{titleError}</Text>}
+            {fieldState.error && (
+                <Text style={styles.errorText}>{fieldState.error.message}</Text>
+            )}
+        </>
+    );
+}
 
-            {/* Description Input */}
-            <View style={[styles.inputRow, styles.descriptionRow]}>
-                <AntDesign
-                    name="message"
-                    size={16}
-                    color={noctuaColors.textMuted}
-                    style={styles.inputIcon}
-                />
-                <TextInput
-                    value={description}
-                    onChangeText={onDescriptionChange}
-                    placeholder="What's the vibe? What should people expect?"
-                    placeholderTextColor={noctuaColors.textMuted}
-                    style={[styles.textInput, styles.descriptionInput]}
-                    multiline
-                    numberOfLines={3}
-                    textAlignVertical="top"
-                />
-            </View>
+function DescriptionField({ control }: BasicDetailsFormProps) {
+    const { field } = useController({ control, name: 'description' });
 
-            {/* Location Input */}
+    return (
+        <View style={[styles.inputRow, styles.descriptionRow]}>
+            <AntDesign
+                name="message"
+                size={16}
+                color={noctuaColors.textMuted}
+                style={styles.inputIcon}
+            />
+            <TextInput
+                value={field.value}
+                onChangeText={field.onChange}
+                onBlur={field.onBlur}
+                placeholder="What's the vibe? What should people expect?"
+                placeholderTextColor={noctuaColors.textMuted}
+                style={[styles.textInput, styles.descriptionInput]}
+                multiline
+                numberOfLines={3}
+                textAlignVertical="top"
+            />
+        </View>
+    );
+}
+
+function LocationField({ control }: BasicDetailsFormProps) {
+    const { field, fieldState } = useController({ control, name: 'location' });
+
+    return (
+        <>
             <View
                 style={[
                     styles.inputRow,
-                    locationError ? styles.inputRowError : null,
+                    fieldState.error ? styles.inputRowError : null,
                 ]}
             >
                 <AntDesign
                     name="environment"
                     size={16}
-                    color={locationError ? '#ff4444' : noctuaColors.textMuted}
+                    color={
+                        fieldState.error ? '#ff4444' : noctuaColors.textMuted
+                    }
                     style={styles.inputIcon}
                 />
                 <TextInput
-                    value={location}
-                    onChangeText={onLocationChange}
+                    value={field.value}
+                    onChangeText={field.onChange}
+                    onBlur={field.onBlur}
                     placeholder="Where? (e.g. El Born, Barcelona)"
                     placeholderTextColor={noctuaColors.textMuted}
                     style={styles.textInput}
                 />
             </View>
-            {locationError && (
-                <Text style={styles.errorText}>{locationError}</Text>
+            {fieldState.error && (
+                <Text style={styles.errorText}>{fieldState.error.message}</Text>
             )}
+        </>
+    );
+}
 
-            {/* Date & Time Row */}
-            <View style={styles.dateTimeRow}>
-                <View style={[styles.inputRow, styles.dateInput]}>
-                    <AntDesign
-                        name="calendar"
-                        size={16}
-                        color={noctuaColors.textMuted}
-                        style={styles.inputIcon}
-                    />
-                    <TextInput
-                        value={date}
-                        onChangeText={onDateChange}
-                        placeholder="Date"
-                        placeholderTextColor={noctuaColors.textMuted}
-                        style={[styles.textInput, styles.dateTimeInput]}
-                    />
-                </View>
-                <View style={[styles.inputRow, styles.timeInput]}>
-                    <AntDesign
-                        name="clock-circle"
-                        size={16}
-                        color={noctuaColors.textMuted}
-                        style={styles.inputIcon}
-                    />
-                    <TextInput
-                        value={time}
-                        onChangeText={onTimeChange}
-                        placeholder="Time"
-                        placeholderTextColor={noctuaColors.textMuted}
-                        style={[styles.textInput, styles.dateTimeInput]}
-                        keyboardType="numbers-and-punctuation"
-                    />
-                </View>
+function DateTimeFields({ control }: BasicDetailsFormProps) {
+    const { field: dateField } = useController({ control, name: 'date' });
+    const { field: timeField } = useController({ control, name: 'time' });
+
+    return (
+        <View style={styles.dateTimeRow}>
+            <View style={[styles.inputRow, styles.dateInput]}>
+                <AntDesign
+                    name="calendar"
+                    size={16}
+                    color={noctuaColors.textMuted}
+                    style={styles.inputIcon}
+                />
+                <TextInput
+                    value={dateField.value}
+                    onChangeText={dateField.onChange}
+                    onBlur={dateField.onBlur}
+                    placeholder="Date"
+                    placeholderTextColor={noctuaColors.textMuted}
+                    style={[styles.textInput, styles.dateTimeInput]}
+                />
+            </View>
+            <View style={[styles.inputRow, styles.timeInput]}>
+                <AntDesign
+                    name="clock-circle"
+                    size={16}
+                    color={noctuaColors.textMuted}
+                    style={styles.inputIcon}
+                />
+                <TextInput
+                    value={timeField.value}
+                    onChangeText={timeField.onChange}
+                    onBlur={timeField.onBlur}
+                    placeholder="22:00"
+                    placeholderTextColor={noctuaColors.textMuted}
+                    style={[styles.textInput, styles.dateTimeInput]}
+                    keyboardType="numbers-and-punctuation"
+                />
             </View>
         </View>
     );
 }
+
+// ─── Export ───────────────────────────────────────────────────────────────────
+
+export function BasicDetailsForm({ control }: BasicDetailsFormProps) {
+    return (
+        <View style={styles.section}>
+            <Text style={styles.sectionTitle}>The Basics</Text>
+            <TitleField control={control} />
+            <DescriptionField control={control} />
+            <LocationField control={control} />
+            <DateTimeFields control={control} />
+        </View>
+    );
+}
+
+// ─── Styles ───────────────────────────────────────────────────────────────────
 
 const styles = StyleSheet.create({
     section: {

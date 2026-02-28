@@ -12,8 +12,8 @@ import {
 import { AntDesign } from '@expo/vector-icons';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Controller } from 'react-hook-form';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { noctuaColors, noctuaRadii } from '@/lib/theme/tokens';
-import { ScreenContainer } from '@/components/ui/screen-container';
 import { ActivitySelector } from '@/components/plans/create/activity-selector';
 import { BasicDetailsForm } from '@/components/plans/create/basic-details-form';
 import { PillSelector } from '@/components/plans/create/pill-selector';
@@ -29,29 +29,33 @@ import {
     PRICE_RANGES,
     TAG_OPTIONS,
     AGE_RANGES,
-    EnergyLevel,
-    PriceRange,
+    type EnergyLevel,
+    type PriceRange,
 } from '@/features/plans/constants';
+
+// ─── Constants ────────────────────────────────────────────────────────────────
+
+/** iOS has a native header ~44pt + status bar. On Android with height behaviour
+ *  the offset should be 0 to let the OS handle it. */
+const KEYBOARD_OFFSET = Platform.OS === 'ios' ? 60 : 0;
+
+// ─── Screen ───────────────────────────────────────────────────────────────────
 
 export default function CreatePlanScreen() {
     const { editId } = useLocalSearchParams<{ editId?: string }>();
     const isEditMode = !!editId;
 
-    const { data: existingPlan, isLoading: isFetchingPlan } =
+    const { data: existingPlan, isPending: isFetchingPlan } =
         usePlanQuery(editId);
 
     const { form, onSubmit, isSubmitting } = useCreatePlanForm({ editId });
     const {
         control,
-        setValue,
-        watch,
         reset,
         formState: { errors },
     } = form;
 
-    const formValues = watch();
-
-    // Populate state if editing
+    // Pre-populate form when editing an existing plan
     useEffect(() => {
         if (isEditMode && existingPlan) {
             reset({
@@ -60,68 +64,80 @@ export default function CreatePlanScreen() {
                 location: existingPlan.location,
                 energy: existingPlan.energy as EnergyLevel,
                 price: existingPlan.price as PriceRange,
-                activityType: 'drinks',
+                activityType: existingPlan.activityType ?? 'drinks',
                 maxAttendees: existingPlan.maxAttendees,
                 tags: existingPlan.tags,
                 ageRange: existingPlan.ageRange,
                 date: 'Tonight',
                 time: '22:00',
-                approvalRequired: true,
-                imageUrl: null,
+                approvalRequired: existingPlan.approvalRequired ?? true,
+                imageUrl: existingPlan.imageUrl ?? null,
             });
         }
     }, [isEditMode, existingPlan, reset]);
 
     if (isEditMode && isFetchingPlan) {
         return (
-            <ScreenContainer>
+            <SafeAreaView
+                style={styles.safeArea}
+                edges={['top', 'left', 'right', 'bottom']}
+            >
                 <Text style={{ color: 'white', padding: 20 }}>Loading...</Text>
-            </ScreenContainer>
+            </SafeAreaView>
         );
     }
 
     return (
-        <ScreenContainer>
+        <SafeAreaView
+            style={styles.safeArea}
+            edges={['top', 'left', 'right', 'bottom']}
+        >
+            {/* ── Fixed header – outside ScrollView so it doesn't scroll ── */}
+            <View style={styles.header}>
+                <Pressable
+                    onPress={() => router.back()}
+                    style={styles.backButton}
+                    hitSlop={8}
+                >
+                    <AntDesign
+                        name="arrow-left"
+                        size={20}
+                        color={noctuaColors.text}
+                    />
+                </Pressable>
+                <Text style={styles.headerTitle}>
+                    {isEditMode ? 'Edit Plan' : 'Create a Plan'}
+                </Text>
+                <View style={styles.headerRight} />
+            </View>
+
+            {/* ── Keyboard-aware scrollable form ── */}
             <KeyboardAvoidingView
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                style={styles.keyboardAvoid}
+                style={styles.flex}
+                keyboardVerticalOffset={KEYBOARD_OFFSET}
             >
                 <ScrollView
-                    style={styles.scrollView}
+                    style={styles.flex}
                     contentContainerStyle={styles.scrollContent}
                     showsVerticalScrollIndicator={false}
                     keyboardShouldPersistTaps="handled"
                 >
-                    {/* Header */}
-                    <View style={styles.header}>
-                        <Pressable
-                            onPress={() => router.back()}
-                            style={styles.backButton}
-                            hitSlop={8}
-                        >
-                            <AntDesign
-                                name="arrow-left"
-                                size={20}
-                                color={noctuaColors.text}
-                            />
-                        </Pressable>
-                        <Text style={styles.headerTitle}>Create a Plan</Text>
-                        <View style={styles.headerRight} />
-                    </View>
-
-                    {/* Page Title */}
+                    {/* Page title */}
                     <View style={styles.titleBlock}>
                         <Text style={styles.pageTitle}>
-                            {isEditMode ? 'Edit Plan' : "Let's make a plan"}
+                            {isEditMode
+                                ? 'Update the details'
+                                : "Let's make a plan"}
                         </Text>
                         <Text style={styles.pageSubtitle}>
                             {isEditMode
-                                ? 'Update the details below.'
+                                ? 'Changes apply immediately after saving.'
                                 : 'Create a vibe for tonight.'}
                         </Text>
                     </View>
 
-                    {/* Modular Form Components using Controllers */}
+                    {/* Cover image */}
                     <Controller
                         control={control}
                         name="imageUrl"
@@ -133,6 +149,7 @@ export default function CreatePlanScreen() {
                         )}
                     />
 
+                    {/* Activity type */}
                     <Controller
                         control={control}
                         name="activityType"
@@ -145,27 +162,10 @@ export default function CreatePlanScreen() {
                         )}
                     />
 
-                    <BasicDetailsForm
-                        title={formValues.title}
-                        description={formValues.description}
-                        location={formValues.location}
-                        date={formValues.date}
-                        time={formValues.time}
-                        onTitleChange={(val) =>
-                            setValue('title', val, { shouldValidate: true })
-                        }
-                        onDescriptionChange={(val) =>
-                            setValue('description', val)
-                        }
-                        onLocationChange={(val) =>
-                            setValue('location', val, { shouldValidate: true })
-                        }
-                        onDateChange={(val) => setValue('date', val)}
-                        onTimeChange={(val) => setValue('time', val)}
-                        titleError={errors.title?.message}
-                        locationError={errors.location?.message}
-                    />
+                    {/* Basic details – each field uses useController internally */}
+                    <BasicDetailsForm control={control} />
 
+                    {/* Energy level */}
                     <Controller
                         control={control}
                         name="energy"
@@ -179,6 +179,7 @@ export default function CreatePlanScreen() {
                         )}
                     />
 
+                    {/* Price range */}
                     <Controller
                         control={control}
                         name="price"
@@ -192,6 +193,7 @@ export default function CreatePlanScreen() {
                         )}
                     />
 
+                    {/* Max attendees */}
                     <Controller
                         control={control}
                         name="maxAttendees"
@@ -203,6 +205,7 @@ export default function CreatePlanScreen() {
                         )}
                     />
 
+                    {/* Tags */}
                     <Controller
                         control={control}
                         name="tags"
@@ -223,6 +226,7 @@ export default function CreatePlanScreen() {
                         )}
                     />
 
+                    {/* Age range */}
                     <Controller
                         control={control}
                         name="ageRange"
@@ -239,6 +243,7 @@ export default function CreatePlanScreen() {
                         )}
                     />
 
+                    {/* Approval required toggle */}
                     <Controller
                         control={control}
                         name="approvalRequired"
@@ -250,7 +255,7 @@ export default function CreatePlanScreen() {
                         )}
                     />
 
-                    {/* Submit Button */}
+                    {/* Submit */}
                     <Pressable
                         onPress={onSubmit}
                         disabled={isSubmitting}
@@ -272,37 +277,40 @@ export default function CreatePlanScreen() {
                                     : 'Guardar Cambios'
                                 : isSubmitting
                                   ? 'Enviando...'
-                                  : 'Publish Plan'}
+                                  : 'Publicar Plan'}
                         </Text>
                         {!isSubmitting && (
                             <Text style={styles.submitButtonArrow}>→</Text>
                         )}
                     </Pressable>
 
-                    {/* Bottom padding */}
                     <View style={styles.bottomPadding} />
                 </ScrollView>
             </KeyboardAvoidingView>
-        </ScreenContainer>
+        </SafeAreaView>
     );
 }
 
+// ─── Styles ───────────────────────────────────────────────────────────────────
+
 const styles = StyleSheet.create({
-    keyboardAvoid: {
+    safeArea: {
+        flex: 1,
+        backgroundColor: noctuaColors.background,
+    },
+    flex: {
         flex: 1,
     },
-    scrollView: {
-        flex: 1,
-    },
-    scrollContent: {
-        paddingHorizontal: 20,
-    },
+
+    /* Fixed header */
     header: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        marginBottom: 24,
-        paddingTop: 8,
+        paddingHorizontal: 20,
+        paddingVertical: 12,
+        borderBottomWidth: 1,
+        borderBottomColor: noctuaColors.border,
     },
     backButton: {
         width: 40,
@@ -312,11 +320,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    backIcon: {
-        color: noctuaColors.text,
-        fontSize: 20,
-        fontWeight: '600',
-    },
     headerTitle: {
         color: noctuaColors.text,
         fontSize: 18,
@@ -325,12 +328,19 @@ const styles = StyleSheet.create({
     headerRight: {
         width: 40,
     },
+
+    /* Scrollable content */
+    scrollContent: {
+        paddingHorizontal: 20,
+        paddingTop: 20,
+        paddingBottom: 40,
+    },
     titleBlock: {
         marginBottom: 24,
     },
     pageTitle: {
         color: noctuaColors.text,
-        fontSize: 28,
+        fontSize: 26,
         fontWeight: '800',
     },
     pageSubtitle: {
@@ -338,6 +348,8 @@ const styles = StyleSheet.create({
         fontSize: 14,
         marginTop: 4,
     },
+
+    /* Submit */
     submitButton: {
         backgroundColor: noctuaColors.primary,
         borderRadius: noctuaRadii.button,
@@ -351,6 +363,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.4,
         shadowRadius: 12,
         elevation: 8,
+        marginTop: 8,
     },
     submitButtonDisabled: {
         backgroundColor: noctuaColors.surface,
@@ -368,6 +381,7 @@ const styles = StyleSheet.create({
         marginLeft: 8,
     },
     bottomPadding: {
-        height: 40,
+        height: 20,
     },
+    errors: {},
 });
