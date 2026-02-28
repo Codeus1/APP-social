@@ -1,14 +1,16 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { Pressable, View, Text, StyleSheet } from 'react-native';
 import { noctuaColors } from '@/lib/theme/tokens';
 
 interface PlanAttendeesCardProps {
     attendees: number;
     maxAttendees: number;
+    onSeeAll: () => void;
 }
 
 export function PlanAttendeesCard({
     attendees,
     maxAttendees,
+    onSeeAll,
 }: PlanAttendeesCardProps) {
     const spotsLeft = maxAttendees - attendees;
 
@@ -16,7 +18,9 @@ export function PlanAttendeesCard({
         <View>
             <View style={styles.whosGoingHeader}>
                 <Text style={styles.sectionTitle}>{"Who's Going"}</Text>
-                <Text style={styles.seeAll}>See all</Text>
+                <Pressable onPress={onSeeAll} hitSlop={8}>
+                    <Text style={styles.seeAll}>See all</Text>
+                </Pressable>
             </View>
             <View style={styles.attendeesCard}>
                 <View style={styles.avatarStack}>

@@ -9,9 +9,10 @@ interface PlanHostCardProps {
         avatarUrl: string | null;
         rating?: number;
     };
+    onMessageHost: () => void;
 }
 
-export function PlanHostCard({ host }: PlanHostCardProps) {
+export function PlanHostCard({ host, onMessageHost }: PlanHostCardProps) {
     return (
         <View style={styles.hostCard}>
             <View style={styles.hostLeft}>
@@ -35,7 +36,11 @@ export function PlanHostCard({ host }: PlanHostCardProps) {
                     </Text>
                 </View>
             </View>
-            <Pressable style={styles.chatButton}>
+            <Pressable
+                style={styles.chatButton}
+                onPress={onMessageHost}
+                hitSlop={8}
+            >
                 <AntDesign name="message" size={18} color={noctuaColors.text} />
             </Pressable>
         </View>

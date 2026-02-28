@@ -7,8 +7,16 @@ function mapDbPlanToFrontend(
     dbPlan: any,
     userJoinStatus: 'none' | 'pending' | 'joined' = 'none',
 ) {
-    // Determine attendees count from plan_attendees optionally joined, or the attendees_count column
-    const attendeesCount = dbPlan.attendees_count ?? 1;
+    // Extract count from relation if available, fallback to 1 (the host)
+    const countData = Array.isArray(dbPlan.plan_attendees)
+        ? dbPlan.plan_attendees[0]?.count
+        : dbPlan.plan_attendees?.count;
+    const attendeesCount = countData ?? 1;
+
+    // Derived properties
+    const now = new Date();
+    const startsAt = new Date(dbPlan.starts_at);
+    const isHappeningNow = dbPlan.status === 'published' && startsAt <= now;
 
     return {
         id: dbPlan.id,
@@ -37,7 +45,9 @@ function mapDbPlanToFrontend(
         ageRange: dbPlan.age_range,
         approvalRequired: dbPlan.approval_required ?? true,
         imageUrl: dbPlan.image_url ?? null,
-        isHappeningNow: dbPlan.is_happening_now ?? false,
+        isHappeningNow,
+        status: dbPlan.status ?? 'published',
+        visibility: dbPlan.visibility ?? 'public',
         userJoinStatus,
     };
 }
@@ -53,9 +63,11 @@ export const plansRouter = router({
                     name,
                     avatar_url,
                     is_verified
-                )
+                ),
+                plan_attendees (count)
             `,
             )
+            .eq('status', 'published')
             .order('starts_at', { ascending: true });
 
         if (error) {
@@ -69,6 +81,37 @@ export const plansRouter = router({
         return data.map((p) => mapDbPlanToFrontend(p));
     }),
 
+    /** Returns the list of confirmed attendees for a plan */
+    getAttendees: publicProcedure
+        .input(z.object({ planId: z.string() }))
+        .query(async ({ ctx, input }) => {
+            const { data, error } = await ctx.supabase
+                .from('plan_attendees')
+                .select(
+                    `user_id,
+                     profiles (
+                         id,
+                         name,
+                         avatar_url
+                     )`,
+                )
+                .eq('plan_id', input.planId)
+                .order('created_at', { ascending: true });
+
+            if (error) {
+                throw new TRPCError({
+                    code: 'INTERNAL_SERVER_ERROR',
+                    message: error.message,
+                });
+            }
+
+            return (data ?? []).map((row: any) => ({
+                id: row.profiles?.id ?? row.user_id,
+                name: row.profiles?.name ?? 'Unknown',
+                avatarUrl: row.profiles?.avatar_url ?? null,
+            }));
+        }),
+
     byId: publicProcedure
         .input(z.object({ id: z.string() }))
         .query(async ({ ctx, input }) => {
@@ -81,7 +124,8 @@ export const plansRouter = router({
                         name,
                         avatar_url,
                         is_verified
-                    )
+                    ),
+                    plan_attendees (count)
                 `,
                 )
                 .eq('id', input.id)
@@ -158,11 +202,11 @@ export const plansRouter = router({
                 max_attendees: input.maxAttendees,
                 starts_at: input.startsAt,
                 host_id: ctx.user.id,
-                // Additional defaults
-                attendees_count: 1,
                 image_url: input.imageUrl || undefined,
                 lat: input.lat || 0,
                 lng: input.lng || 0,
+                status: 'published',
+                visibility: 'public',
             };
 
             const { data, error } = await ctx.supabase
@@ -193,7 +237,7 @@ export const plansRouter = router({
             // First check if already fully joined or plan is full
             const { data: plan, error: planError } = await ctx.supabase
                 .from('plans')
-                .select('max_attendees, attendees_count')
+                .select('max_attendees, plan_attendees(count)')
                 .eq('id', input.id)
                 .single();
 
@@ -203,7 +247,11 @@ export const plansRouter = router({
                     message: 'Plan not found',
                 });
 
-            if (plan.attendees_count >= plan.max_attendees) {
+            const currentAttendees = Array.isArray(plan.plan_attendees)
+                ? (plan.plan_attendees[0]?.count ?? 0)
+                : ((plan.plan_attendees as any)?.count ?? 0);
+
+            if (currentAttendees >= plan.max_attendees) {
                 throw new TRPCError({
                     code: 'BAD_REQUEST',
                     message: 'Plan is full',
@@ -290,7 +338,7 @@ export const plansRouter = router({
             // Verify host
             const { data: plan } = await ctx.supabase
                 .from('plans')
-                .select('host_id, attendees_count, max_attendees')
+                .select('host_id, max_attendees, plan_attendees(count)')
                 .eq('id', input.planId)
                 .single();
 
@@ -301,9 +349,13 @@ export const plansRouter = router({
                 });
             }
 
+            const currentAttendees = Array.isArray(plan.plan_attendees)
+                ? (plan.plan_attendees[0]?.count ?? 0)
+                : ((plan.plan_attendees as any)?.count ?? 0);
+
             if (
                 input.status === 'accepted' &&
-                plan.attendees_count >= plan.max_attendees
+                currentAttendees >= plan.max_attendees
             ) {
                 throw new TRPCError({
                     code: 'BAD_REQUEST',
@@ -329,12 +381,6 @@ export const plansRouter = router({
                 await ctx.supabase
                     .from('plan_attendees')
                     .insert({ plan_id: input.planId, user_id: input.userId });
-
-                // Increment plan count
-                await ctx.supabase
-                    .from('plans')
-                    .update({ attendees_count: plan.attendees_count + 1 })
-                    .eq('id', input.planId);
             }
 
             // ── Fetch plan title + host profile name for the notification body ──

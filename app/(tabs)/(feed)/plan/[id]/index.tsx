@@ -1,4 +1,8 @@
-import { useLocalSearchParams, router } from 'expo-router';
+import {
+    useLocalSearchParams,
+    router,
+    type RelativePathString,
+} from 'expo-router';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AntDesign } from '@expo/vector-icons';
@@ -51,7 +55,7 @@ export default function PlanDetailScreen() {
         try {
             await joinPlanMutation.mutateAsync({ id: plan.id });
         } catch {
-            // handled quietly or could show alert
+            // handled quietly
         }
     };
 
@@ -69,6 +73,19 @@ export default function PlanDetailScreen() {
             pathname: '/(tabs)/(feed)/create-plan',
             params: { editId: plan.id },
         });
+    };
+
+    /** Navigate to the attendees list for this plan */
+    const handleSeeAll = () => {
+        router.push(
+            `/(tabs)/(feed)/plan/${plan.id}/attendees` as RelativePathString,
+        );
+    };
+
+    /** Open a DM conversation with the plan host */
+    const handleMessageHost = () => {
+        if (!plan.host?.id) return;
+        router.push(`/(tabs)/(chats)/${plan.host.id}` as RelativePathString);
     };
 
     const handleRespondRequest = (
@@ -137,7 +154,11 @@ export default function PlanDetailScreen() {
                         <Text style={styles.metaText}>{plan.location}</Text>
                     </View>
 
-                    <PlanHostCard host={plan.host} />
+                    {/* Host card — message button opens DM */}
+                    <PlanHostCard
+                        host={plan.host}
+                        onMessageHost={handleMessageHost}
+                    />
 
                     {/* The Plan section */}
                     <Text style={styles.sectionTitle}>The Plan</Text>
@@ -150,10 +171,11 @@ export default function PlanDetailScreen() {
                         ageRange={plan.ageRange}
                     />
 
-                    {/* Who's Going */}
+                    {/* Who's Going — See all opens attendees list */}
                     <PlanAttendeesCard
                         attendees={plan.attendees}
                         maxAttendees={plan.maxAttendees}
+                        onSeeAll={handleSeeAll}
                     />
 
                     {/* Pending Requests (Host Only) */}
