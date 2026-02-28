@@ -96,7 +96,7 @@ export const plansRouter = router({
                      )`,
                 )
                 .eq('plan_id', input.planId)
-                .order('created_at', { ascending: true });
+                .order('joined_at', { ascending: true });
 
             if (error) {
                 throw new TRPCError({
@@ -142,27 +142,37 @@ export const plansRouter = router({
             let userJoinStatus: 'none' | 'pending' | 'joined' = 'none';
 
             if (ctx.user) {
-                // Check joined
-                const { data: attendee } = await ctx.supabase
-                    .from('plan_attendees')
-                    .select('user_id')
-                    .eq('plan_id', input.id)
-                    .eq('user_id', ctx.user.id)
-                    .single();
-
-                if (attendee) {
+                if (ctx.user.id === data.host_id) {
                     userJoinStatus = 'joined';
                 } else {
-                    // Check pending
-                    const { data: req } = await ctx.supabase
-                        .from('join_requests')
-                        .select('status')
+                    // Check joined
+                    const { data: attendee } = await ctx.supabase
+                        .from('plan_attendees')
+                        .select('user_id')
                         .eq('plan_id', input.id)
                         .eq('user_id', ctx.user.id)
-                        .eq('status', 'pending')
-                        .single();
+                        .maybeSingle();
 
-                    if (req) userJoinStatus = 'pending';
+                    if (attendee) {
+                        userJoinStatus = 'joined';
+                    } else {
+                        // Check pending
+                        const { data: req, error: reqError } =
+                            await ctx.supabase
+                                .from('join_requests')
+                                .select('status')
+                                .eq('plan_id', input.id)
+                                .eq('user_id', ctx.user.id)
+                                .eq('status', 'pending')
+                                .maybeSingle();
+
+                        console.log(
+                            `[byId Debug] pending check for user ${ctx.user.id} on plan ${input.id}:`,
+                            { req, reqError },
+                        );
+
+                        if (req) userJoinStatus = 'pending';
+                    }
                 }
             }
 
@@ -304,7 +314,7 @@ export const plansRouter = router({
                 .select(
                     `
                     id, status, created_at,
-                    user:profiles!join_requests_user_id_fkey(id, name, avatar_url, host_level, rating)
+                    user:profiles(id, name, avatar_url, host_level)
                 `,
                 )
                 .eq('plan_id', input.planId)
@@ -378,9 +388,23 @@ export const plansRouter = router({
 
             if (input.status === 'accepted') {
                 // Add to plan attendees
-                await ctx.supabase
+                const { error: insertError } = await ctx.supabase
                     .from('plan_attendees')
                     .insert({ plan_id: input.planId, user_id: input.userId });
+
+                if (insertError) {
+                    console.error(
+                        '[respondToJoinRequest] Failed to add attendee:',
+                        insertError,
+                    );
+                    // Rollback request status in a real world app, but for now throw
+                    throw new TRPCError({
+                        code: 'INTERNAL_SERVER_ERROR',
+                        message:
+                            'Failed to add user to plan attendees: ' +
+                            insertError.message,
+                    });
+                }
             }
 
             // ── Fetch plan title + host profile name for the notification body ──

@@ -24,11 +24,26 @@ export async function createContext(opts: FetchCreateContextFnOptions) {
     if (authHeader) {
         console.log('[tRPC Context] Auth header present, fetching user...');
         const token = authHeader.replace('Bearer ', '');
+
+        // Correct implementation for SSR to enforce RLS properly
         const { data, error } = await supabase.auth.getUser(token);
         if (error) {
             console.error('[tRPC Context] Supabase auth error:', error.message);
+        } else if (data.user) {
+            user = data.user;
+            // Force the session on this specific Supabase client instance
+            // so that all database queries accurately reflect auth.uid()
+            const { error: sessionError } = await supabase.auth.setSession({
+                access_token: token,
+                refresh_token: '',
+            });
+            if (sessionError) {
+                console.error(
+                    '[tRPC Context] setSession error:',
+                    sessionError.message,
+                );
+            }
         }
-        user = data?.user ?? null;
         console.log('[tRPC Context] User resolved:', user?.id || 'null');
     } else {
         console.log('[tRPC Context] No auth header present in request.');

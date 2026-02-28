@@ -110,10 +110,17 @@ const styles = StyleSheet.create({
     activityIconBoxActive: {
         backgroundColor: noctuaColors.primary,
         borderWidth: 0,
-        shadowColor: noctuaColors.primary,
-        shadowOffset: { width: 0, height: 0 },
-        shadowOpacity: 0.4,
-        shadowRadius: 12,
+        ...Platform.select({
+            web: {
+                boxShadow: `0px 0px 12px ${noctuaColors.primary}66`,
+            },
+            default: {
+                shadowColor: noctuaColors.primary,
+                shadowOffset: { width: 0, height: 0 },
+                shadowOpacity: 0.4,
+                shadowRadius: 12,
+            },
+        }),
         elevation: 8,
     },
     activityLabel: {

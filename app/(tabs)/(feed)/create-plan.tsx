@@ -358,16 +358,30 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        shadowColor: noctuaColors.primary,
-        shadowOffset: { width: 0, height: 0 },
-        shadowOpacity: 0.4,
-        shadowRadius: 12,
+        ...Platform.select({
+            web: {
+                boxShadow: `0px 0px 12px ${noctuaColors.primary}66`,
+            },
+            default: {
+                shadowColor: noctuaColors.primary,
+                shadowOffset: { width: 0, height: 0 },
+                shadowOpacity: 0.4,
+                shadowRadius: 12,
+            },
+        }),
         elevation: 8,
         marginTop: 8,
     },
     submitButtonDisabled: {
         backgroundColor: noctuaColors.surface,
-        shadowOpacity: 0,
+        ...Platform.select({
+            web: {
+                boxShadow: 'none',
+            },
+            default: {
+                shadowOpacity: 0,
+            },
+        }),
         elevation: 0,
     },
     submitButtonText: {

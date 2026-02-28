@@ -192,12 +192,14 @@ export default function PlanDetailScreen() {
             </ScrollView>
 
             {/* Bottom CTA */}
-            <PlanJoinCta
-                isFull={isFull}
-                isPendingNetwork={joinPlanMutation.isPending}
-                userJoinStatus={plan.userJoinStatus}
-                onJoin={handleJoin}
-            />
+            {!isHost && (
+                <PlanJoinCta
+                    isFull={isFull}
+                    isPendingNetwork={joinPlanMutation.isPending}
+                    userJoinStatus={plan.userJoinStatus}
+                    onJoin={handleJoin}
+                />
+            )}
         </SafeAreaView>
     );
 }
