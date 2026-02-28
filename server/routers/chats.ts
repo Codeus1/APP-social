@@ -38,7 +38,7 @@ export const chatsRouter = router({
                         .in('chat_id', myChatIds)
                         .eq('user_id', input.targetUserId);
 
-                if (commonChats.length > 0) {
+                if (commonChats && commonChats.length > 0) {
                     return { chatId: commonChats[0].chat_id };
                 }
             }
@@ -75,6 +75,85 @@ export const chatsRouter = router({
 
             return { chatId: newChat.id };
         }),
+
+    getUserChats: protectedProcedure.query(async ({ ctx }) => {
+        const { data, error } = await ctx.supabase
+            .from('chat_members')
+            .select(
+                `
+                    chat_id,
+                    chats (
+                        id, type, plan_id, last_message, last_message_at,
+                        members:chat_members (
+                            user_id,
+                            profiles!chat_members_user_id_fkey (name, avatar_url)
+                        ),
+                        plan:plans (title, image_url, starts_at, host_id, host:profiles!plans_host_id_fkey(name))
+                    )
+                `,
+            )
+            .eq('user_id', ctx.user.id);
+
+        if (error) {
+            throw new TRPCError({
+                code: 'INTERNAL_SERVER_ERROR',
+                message: error.message,
+            });
+        }
+
+        return data
+            .map((membership: any) => {
+                const c = membership.chats;
+                const otherMembers = c.members.filter(
+                    (m: any) => m.user_id !== ctx.user.id,
+                );
+
+                let title = 'Chat';
+                let hostName = 'Unknown';
+                let imageUrl = 'https://i.pravatar.cc/150';
+                let isHappeningNow = false;
+
+                if (c.type === 'direct') {
+                    if (otherMembers.length > 0) {
+                        const other = otherMembers[0].profiles;
+                        title = other?.name ?? 'User';
+                        hostName = other?.name ?? 'User';
+                        imageUrl = other?.avatar_url ?? imageUrl;
+                    }
+                } else if (c.plan) {
+                    title = c.plan.title;
+                    hostName = c.plan.host?.name ?? 'Plan Host';
+                    imageUrl = c.plan.image_url ?? imageUrl;
+
+                    if (c.plan.starts_at) {
+                        const start = new Date(c.plan.starts_at);
+                        const now = new Date();
+                        const diffHours =
+                            (start.getTime() - now.getTime()) /
+                            (1000 * 60 * 60);
+                        isHappeningNow = diffHours > -2 && diffHours < 12; // simple heuristic
+                    }
+                }
+
+                return {
+                    id: c.id,
+                    planId: c.plan_id ?? '',
+                    planTitle: title,
+                    planImageUrl: imageUrl,
+                    hostName,
+                    lastMessage: c.last_message ?? '',
+                    lastMessageAt:
+                        c.last_message_at ?? new Date(0).toISOString(),
+                    unreadCount: 0,
+                    isHappeningNow,
+                };
+            })
+            .sort(
+                (a, b) =>
+                    new Date(b.lastMessageAt).getTime() -
+                    new Date(a.lastMessageAt).getTime(),
+            );
+    }),
 
     getChatMeta: protectedProcedure
         .input(z.object({ chatId: z.string() }))
